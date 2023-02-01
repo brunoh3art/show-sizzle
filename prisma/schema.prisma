@@ -1,0 +1,27 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Movie {
+  id               String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title            String
+  original_title   String
+  overview         String?
+  release_date     String
+  poster_image     String?
+  background_image String?
+  published        Boolean
+
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @default(now()) @db.Timestamptz(6)
+
+  @@map("movie")
+}
