@@ -1,5 +1,5 @@
 export class MovieNotFoundException extends Error {
   constructor() {
-    super('Movie not found');
+    super('Content not found');
   }
 }

@@ -8,7 +8,7 @@ interface DeleteMovieRequest {
 
 type DeleteMovieResponse = void;
 @Injectable()
-export class CreateMovie {
+export class DeleteMovie {
   constructor(private contentRepository: MovieRepository) {}
 
   async execute(request: DeleteMovieRequest): Promise<DeleteMovieResponse> {
@@ -17,5 +17,7 @@ export class CreateMovie {
     const movie = await this.contentRepository.findById(movieId);
 
     if (!movie) throw new MovieNotFoundException();
+
+    await this.contentRepository.remove(movie.id);
   }
 }

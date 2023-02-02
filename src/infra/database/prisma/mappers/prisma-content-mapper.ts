@@ -1,4 +1,5 @@
-import { Content } from '@application/entities/content';
+import { Content, Title } from '@application/entities/content';
+import { Movie } from '@prisma/client';
 
 export class PrismaContentMapper {
   static toPrisma(content: Content) {
@@ -14,5 +15,22 @@ export class PrismaContentMapper {
       createdAt: content.createdAt,
       updatedAt: content.updatedAt,
     };
+  }
+
+  static toDomain(content: Movie): Content {
+    return new Content(
+      {
+        title: new Title(content.title),
+        original_title: new Title(content.original_title),
+        overview: content.overview,
+        release_date: content.release_date,
+        poster_image: content.poster_image,
+        background_image: content.background_image,
+        published: content.published,
+        createdAt: content.createdAt,
+        updatedAt: content.updatedAt,
+      },
+      content.id,
+    );
   }
 }

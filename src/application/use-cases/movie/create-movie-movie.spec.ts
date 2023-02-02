@@ -1,4 +1,4 @@
-import { InMemoryMovieRepository } from '../../../../test/repositories/in-memory-movie-repository';
+import { InMemoryMovieRepository } from '@test/repositories/in-memory-movie-repository';
 import { CreateMovie } from './create-movie';
 
 describe('Create movie', () => {
@@ -15,8 +15,6 @@ describe('Create movie', () => {
       background_image: 'string',
       published: true,
     });
-
-    console.log(createMovieRepository.movies);
 
     expect(createMovieRepository.movies).toHaveLength(1);
     expect(createMovieRepository.movies[0]).toEqual(content);

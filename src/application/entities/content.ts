@@ -18,8 +18,8 @@ export class Content {
   private _id: string;
   private props: ContentProps;
 
-  constructor(props: Replace<ContentProps, { createdAt?: Date; updatedAt?: Date }>) {
-    this._id = randomUUID();
+  constructor(props: Replace<ContentProps, { createdAt?: Date; updatedAt?: Date }>, id?: string) {
+    this._id = id ?? randomUUID();
     this.props = {
       ...props,
       createdAt: props.createdAt ?? new Date(),
