@@ -95,7 +95,6 @@ export class Title {
   }
 
   private validateTitleLength(value: string): boolean {
-    console.log(`validateTitleLength: ${value}`);
     return value.length >= 3 && value.length <= 240;
   }
 

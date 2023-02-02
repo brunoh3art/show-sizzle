@@ -25,3 +25,19 @@ model Movie {
 
   @@map("movie")
 }
+
+model TvShow {
+  id               String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title            String
+  original_title   String
+  overview         String?
+  release_date     String
+  poster_image     String?
+  background_image String?
+  published        Boolean
+
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @default(now()) @db.Timestamptz(6)
+
+  @@map("tvshow")
+}
