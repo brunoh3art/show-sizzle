@@ -11,7 +11,7 @@ datasource db {
 }
 
 model Movie {
-  id               String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   title            String
   original_title   String
   overview         String?
@@ -19,15 +19,15 @@ model Movie {
   poster_image     String?
   background_image String?
   published        Boolean
-
-  createdAt DateTime @default(now()) @db.Timestamptz(6)
-  updatedAt DateTime @default(now()) @db.Timestamptz(6)
+  genres           Genre[]
+  createdAt        DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt        DateTime @default(now()) @db.Timestamptz(6)
 
   @@map("movie")
 }
 
 model TvShow {
-  id               String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   title            String
   original_title   String
   overview         String?
@@ -35,9 +35,9 @@ model TvShow {
   poster_image     String?
   background_image String?
   published        Boolean
-
   // prisma relationships
-  seasons Season[]
+  genres           Genre[]
+  seasons          Season[]
 
   createdAt DateTime @default(now()) @db.Timestamptz(6)
   updatedAt DateTime @default(now()) @db.Timestamptz(6)
@@ -82,4 +82,21 @@ model Episode {
   updatedAt DateTime @default(now()) @db.Timestamptz(6)
 
   @@map("episode")
+}
+
+// prisma model for the genres of the current tvshow
+model Genre {
+  id       String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title    String
+  // prisma relationships
+  movie    Movie?  @relation(fields: [movieId], references: [id])
+  tvshow   TvShow? @relation(fields: [tvShowId], references: [id])
+  // prisma relationship ids
+  movieId  String? @db.Uuid
+  tvShowId String? @db.Uuid
+
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @default(now()) @db.Timestamptz(6)
+
+  @@map("genre")
 }
