@@ -1,39 +1,37 @@
-import { TvShowRepository } from '@application/repositories/tvshow-repository';
+import { Season, SeasonNumber, SeasonTitle } from '@application/entities/season';
+import { SeasonRepository } from '@application/repositories/season-repository';
 import { Injectable } from '@nestjs/common';
-import { Content, Title } from '../../entities/content';
 
-interface CreateTvShowRequest {
+interface CreateSeasonRequest {
   title: string;
-  original_title: string;
-  overview?: string;
-  release_date: string;
+  season_number: number;
+  season_overview?: string;
   poster_image?: string;
-  background_image?: string;
-  published: boolean;
+  release_date?: string;
+  isPublished?: boolean;
 }
 
-interface CreateTvShowResponse {
-  content: Content;
+interface CreateSeasonResponse {
+  season: Season;
 }
 @Injectable()
-export class CreateTvShow {
-  constructor(private contentRepository: TvShowRepository) {}
+export class CreateSeason {
+  constructor(private seasonRepository: SeasonRepository) {}
 
-  async execute(request: CreateTvShowRequest): Promise<CreateTvShowResponse> {
-    const { title, original_title, overview, release_date, poster_image, background_image, published } = request;
+  async execute(request: CreateSeasonRequest): Promise<CreateSeasonResponse> {
+    const { title, release_date, poster_image, season_number, isPublished, season_overview } = request;
 
-    const content = new Content({
-      title: new Title(title),
-      original_title: new Title(original_title),
-      overview,
+    const season = new Season({
+      title: new SeasonTitle(title),
+      season_number: new SeasonNumber(season_number),
+      season_overview,
       release_date,
       poster_image,
-      background_image,
-      published,
+      isPublished,
     });
 
-    await this.contentRepository.create(content);
+    await this.seasonRepository.create(season);
 
-    return { content };
+    return { season };
   }
 }

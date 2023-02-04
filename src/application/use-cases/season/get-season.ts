@@ -1,25 +1,25 @@
-import { TvShowRepository } from '@application/repositories/tvshow-repository';
+import { Season } from '@application/entities/season';
+import { SeasonRepository } from '@application/repositories/season-repository';
 import { Injectable } from '@nestjs/common';
-import { Content } from '../../entities/content';
 
-interface GetTvShowRequest {
-  tvshowId: string;
+interface GetSeasonRequest {
+  seasonId: string;
 }
 
-interface GetTvShowResponse {
-  content: Content;
+interface GetSeasonResponse {
+  season: Season;
 }
 @Injectable()
-export class GetTvShow {
-  constructor(private contentRepository: TvShowRepository) {}
+export class GetSeason {
+  constructor(private seasonRepository: SeasonRepository) {}
 
-  async execute(request: GetTvShowRequest): Promise<GetTvShowResponse> {
-    const { tvshowId } = request;
+  async execute(request: GetSeasonRequest): Promise<GetSeasonResponse> {
+    const { seasonId } = request;
 
-    const content = await this.contentRepository.findById(tvshowId);
+    const season = await this.seasonRepository.findById(seasonId);
 
     return {
-      content: content,
+      season: season,
     };
   }
 }

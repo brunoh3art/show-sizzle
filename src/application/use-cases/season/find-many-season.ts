@@ -1,30 +1,28 @@
-import { TvShowRepository } from '@application/repositories/tvshow-repository';
+import { Season } from '@application/entities/season';
+import { SeasonRepository } from '@application/repositories/season-repository';
 import { Injectable } from '@nestjs/common';
-import { Content } from '../../entities/content';
 
-interface FindManyTvShowRequest {
+interface FindManySeasonRequest {
   skip?: number;
   take: number;
 }
 
-interface FindManyTvShowResponse {
-  page: number;
+type FindManySeasonResponse = {
   total: number;
-  content: Content[];
-}
+  seasons: Season[];
+};
 @Injectable()
-export class FindManyTvShow {
-  constructor(private contentRepository: TvShowRepository) {}
+export class FindManySeason {
+  constructor(private seasonRepository: SeasonRepository) {}
 
-  async execute(request: FindManyTvShowRequest): Promise<FindManyTvShowResponse> {
+  async execute(request: FindManySeasonRequest): Promise<FindManySeasonResponse> {
     const { skip, take } = request;
 
-    const { content, total } = await this.contentRepository.findMany(skip, take);
+    const { seasons, total } = await this.seasonRepository.findMany(skip, take);
 
     return {
-      content: content,
+      seasons: seasons,
       total: total,
-      page: skip,
     };
   }
 }
