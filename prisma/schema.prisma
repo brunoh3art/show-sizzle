@@ -36,6 +36,9 @@ model TvShow {
   background_image String?
   published        Boolean
 
+  // prisma relationships
+  seasons Season[]
+
   createdAt DateTime @default(now()) @db.Timestamptz(6)
   updatedAt DateTime @default(now()) @db.Timestamptz(6)
 
@@ -52,6 +55,9 @@ model Season {
   isPublished     Boolean   @default(false)
   // prisma relationships
   episodes        Episode[]
+  // prisma relationship ids
+  tvshow          TvShow?   @relation(fields: [tvshowId], references: [id])
+  tvshowId        String?   @db.Uuid
 
   createdAt DateTime @default(now()) @db.Timestamptz(6)
   updatedAt DateTime @default(now()) @db.Timestamptz(6)
@@ -69,6 +75,7 @@ model Episode {
   release_date   String
   // prisma relationships
   season         Season? @relation(fields: [seasonId], references: [id])
+  // prisma relationship ids
   seasonId       String? @db.Uuid
 
   createdAt DateTime @default(now()) @db.Timestamptz(6)
