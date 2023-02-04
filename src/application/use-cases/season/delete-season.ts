@@ -1,6 +1,6 @@
 import { TvShowRepository } from '@application/repositories/tvshow-repository';
 import { Injectable } from '@nestjs/common';
-import { TvShowNotFoundException } from '../errors/tvshow-not-found';
+import { SeasonFoundException } from '../errors/season-not-found';
 
 interface DeleteSeasonRequest {
   seasonId: string;
@@ -16,7 +16,7 @@ export class DeleteSeason {
 
     const season = await this.seasonRepository.findById(seasonId);
 
-    if (!season) throw new TvShowNotFoundException();
+    if (!season) throw new SeasonFoundException();
 
     await this.seasonRepository.remove(season.id);
   }
