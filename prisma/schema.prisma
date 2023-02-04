@@ -43,16 +43,36 @@ model TvShow {
 }
 
 model Season {
-  id              String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id              String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   title           String
   season_number   Int
   season_overview String?
   poster_image    String?
   release_date    String?
-  isPublished     Boolean @default(false)
+  isPublished     Boolean   @default(false)
+  // prisma relationships
+  episodes        Episode[]
 
   createdAt DateTime @default(now()) @db.Timestamptz(6)
   updatedAt DateTime @default(now()) @db.Timestamptz(6)
 
   @@map("season")
+}
+
+// prisma model for the episode
+
+model Episode {
+  id             String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title          String
+  override       String?
+  episode_number Int
+  release_date   String
+  // prisma relationships
+  season         Season? @relation(fields: [seasonId], references: [id])
+  seasonId       String? @db.Uuid
+
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @default(now()) @db.Timestamptz(6)
+
+  @@map("episode")
 }
