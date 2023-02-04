@@ -41,3 +41,18 @@ model TvShow {
 
   @@map("tvshow")
 }
+
+model Season {
+  id              String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title           String
+  season_number   Int
+  season_overview String?
+  poster_image    String?
+  release_date    String?
+  isPublished     Boolean @default(false)
+
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @default(now()) @db.Timestamptz(6)
+
+  @@map("season")
+}

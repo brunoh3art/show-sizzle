@@ -7,6 +7,8 @@ export interface SeasonProps {
   season_overview?: string;
   poster_image?: string;
   release_date?: string;
+  //boolean verifies that the publication
+  isPublished?: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -48,6 +50,13 @@ export class Season {
   }
   public get poster_image(): string {
     return this.props.poster_image;
+  }
+
+  public set isPublished(isPublished: boolean) {
+    this.props.isPublished = isPublished;
+  }
+  public get isPublished(): boolean {
+    return this.props.isPublished;
   }
 
   public get createdAt(): Date {
