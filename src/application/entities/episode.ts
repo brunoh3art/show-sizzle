@@ -65,6 +65,13 @@ export class Episode {
     return this.props.isPublished;
   }
 
+  public set release_date(release_date: string) {
+    this.props.release_date = release_date;
+  }
+  public get release_date(): string {
+    return this.props.release_date;
+  }
+
   public get createdAt(): Date {
     return this.props.createdAt;
   }

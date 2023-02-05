@@ -6,9 +6,9 @@ export interface EpisodeResponse {
 }
 
 export abstract class EpisodeRepository {
-  abstract findById(content: string): Promise<Episode | null>;
+  abstract findById(episodeId: string): Promise<Episode | null>;
   abstract findMany(skip: number, take: number): Promise<EpisodeResponse>;
-  abstract create(content: Episode): Promise<void>;
-  abstract save(episodeId: string, content: Episode): Promise<void>;
-  abstract remove(content: string): Promise<void>;
+  abstract create(episode: Episode): Promise<void>;
+  abstract save(episodeId: string, episode: Episode): Promise<void>;
+  abstract remove(episodeId: string): Promise<void>;
 }
