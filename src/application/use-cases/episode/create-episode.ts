@@ -1,37 +1,37 @@
-import { Season, SeasonNumber, SeasonTitle } from '@application/entities/season';
-import { SeasonRepository } from '@application/repositories/season-repository';
+import { Episode, EpisodeNumber, EpisodeTitle } from '@application/entities/episode';
+import { EpisodeRepository } from '@application/repositories/episode-repository';
 import { Injectable } from '@nestjs/common';
 
-interface CreateSeasonRequest {
+interface CreateEpisodeRequest {
   title: string;
-  season_number: number;
-  season_overview?: string;
-  poster_image?: string;
+  episode_number: number;
+  overview?: string;
+  background_image?: string;
   release_date?: string;
   isPublished?: boolean;
 }
 
-interface CreateSeasonResponse {
-  season: Season;
+interface CreateEpisodeResponse {
+  episode: Episode;
 }
 @Injectable()
-export class CreateSeason {
-  constructor(private seasonRepository: SeasonRepository) {}
+export class CreateEpisode {
+  constructor(private episodeRepository: EpisodeRepository) {}
 
-  async execute(request: CreateSeasonRequest): Promise<CreateSeasonResponse> {
-    const { title, release_date, poster_image, season_number, isPublished, season_overview } = request;
+  async execute(request: CreateEpisodeRequest): Promise<CreateEpisodeResponse> {
+    const { title, release_date, background_image, episode_number, isPublished, overview } = request;
 
-    const season = new Season({
-      title: new SeasonTitle(title),
-      season_number: new SeasonNumber(season_number),
-      season_overview,
+    const episode = new Episode({
+      title: new EpisodeTitle(title),
+      episode_number: new EpisodeNumber(episode_number),
+      overview,
       release_date,
-      poster_image,
+      background_image,
       isPublished,
     });
 
-    await this.seasonRepository.create(season);
+    await this.episodeRepository.create(episode);
 
-    return { season };
+    return { episode };
   }
 }

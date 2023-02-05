@@ -8,7 +8,7 @@ export interface EpisodeProps {
   overview?: string;
   background_image?: string;
   release_date?: string;
-  season: Season[];
+  season?: Season;
   //boolean verifies that the publication
   isPublished?: boolean;
   createdAt: Date;
@@ -40,7 +40,7 @@ export class Episode {
     return this.props.episode_number;
   }
 
-  public get season(): Season[] {
+  public get season(): Season {
     return this.props.season;
   }
 

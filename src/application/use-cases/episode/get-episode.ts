@@ -1,25 +1,25 @@
-import { Season } from '@application/entities/season';
-import { SeasonRepository } from '@application/repositories/season-repository';
+import { Episode } from '@application/entities/episode';
+import { EpisodeRepository } from '@application/repositories/episode-repository';
 import { Injectable } from '@nestjs/common';
 
-interface GetSeasonRequest {
-  seasonId: string;
+interface GetEpisodeRequest {
+  episodeId: string;
 }
 
-interface GetSeasonResponse {
-  season: Season;
+interface GetEpisodeResponse {
+  episode: Episode;
 }
 @Injectable()
-export class GetSeason {
-  constructor(private seasonRepository: SeasonRepository) {}
+export class GetEpisode {
+  constructor(private episodeRepository: EpisodeRepository) {}
 
-  async execute(request: GetSeasonRequest): Promise<GetSeasonResponse> {
-    const { seasonId } = request;
+  async execute(request: GetEpisodeRequest): Promise<GetEpisodeResponse> {
+    const { episodeId } = request;
 
-    const season = await this.seasonRepository.findById(seasonId);
+    const episode = await this.episodeRepository.findById(episodeId);
 
     return {
-      season: season,
+      episode: episode,
     };
   }
 }

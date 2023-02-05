@@ -1,23 +1,23 @@
-import { TvShowRepository } from '@application/repositories/tvshow-repository';
+import { EpisodeRepository } from '@application/repositories/episode-repository';
 import { Injectable } from '@nestjs/common';
-import { SeasonFoundException } from '../errors/season-not-found';
+import { EpisodeFoundException } from '../errors/episode-not-found';
 
-interface DeleteSeasonRequest {
-  seasonId: string;
+interface DeleteEpisodeRequest {
+  episodeId: string;
 }
 
-type DeleteSeasonResponse = void;
+type DeleteEpisodeResponse = void;
 @Injectable()
-export class DeleteSeason {
-  constructor(private seasonRepository: TvShowRepository) {}
+export class DeleteEpisode {
+  constructor(private episodeRepository: EpisodeRepository) {}
 
-  async execute(request: DeleteSeasonRequest): Promise<DeleteSeasonResponse> {
-    const { seasonId } = request;
+  async execute(request: DeleteEpisodeRequest): Promise<DeleteEpisodeResponse> {
+    const { episodeId } = request;
 
-    const season = await this.seasonRepository.findById(seasonId);
+    const episode = await this.episodeRepository.findById(episodeId);
 
-    if (!season) throw new SeasonFoundException();
+    if (!episode) throw new EpisodeFoundException();
 
-    await this.seasonRepository.remove(season.id);
+    await this.episodeRepository.remove(episode.id);
   }
 }
