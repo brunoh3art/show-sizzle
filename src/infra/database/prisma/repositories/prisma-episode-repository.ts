@@ -12,14 +12,15 @@ export class PrismaEpisodeRepository implements EpisodeRepository {
 
     return PrismaEpisodeMapper.toDomain(episode);
   }
-  async findMany(skip: number, take: number): Promise<EpisodeResponse> {
+  async findMany({ skip, take, seasonId }): Promise<EpisodeResponse> {
     const [episodes, count] = await this.prisma.$transaction([
       this.prisma.episode.findMany({
         skip: skip,
         take: take,
         include: { season: true },
+        where: { seasonId: seasonId },
       }),
-      this.prisma.episode.count({ skip: undefined, take: undefined }),
+      this.prisma.episode.count({ where: { seasonId: seasonId }, skip: undefined, take: undefined }),
     ]);
 
     return {
@@ -27,7 +28,7 @@ export class PrismaEpisodeRepository implements EpisodeRepository {
       episodes: episodes.map(PrismaEpisodeMapper.toDomain),
     };
   }
-  async create(episode: Episode, seasonId: string): Promise<void> {
+  async create({ episode, seasonId }): Promise<void> {
     const raw = PrismaEpisodeMapper.toPrisma(episode);
     await this.prisma.episode.create({
       data: {
