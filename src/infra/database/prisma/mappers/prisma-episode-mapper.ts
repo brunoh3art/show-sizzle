@@ -1,6 +1,8 @@
 import { Episode, EpisodeNumber, EpisodeTitle } from '@application/entities/episode';
+import { Replace } from '@helpers/replace';
 
-import { Episode as PrismaEpisode } from '@prisma/client';
+import { Episode as PrismaEpisode, Season as PrismaSeason } from '@prisma/client';
+import { PrismaSeasonMapper } from './prisma-season-mapper';
 
 export class PrismaEpisodeMapper {
   static toPrisma(episode: Episode) {
@@ -16,7 +18,7 @@ export class PrismaEpisodeMapper {
     };
   }
 
-  static toDomain(episode: PrismaEpisode) {
+  static toDomain(episode: Replace<PrismaEpisode, { season?: PrismaSeason }>) {
     return new Episode({
       title: new EpisodeTitle(episode.title),
       episode_number: new EpisodeNumber(episode.episode_number),
@@ -26,6 +28,7 @@ export class PrismaEpisodeMapper {
       isPublished: episode.isPublished,
       createdAt: episode.createdAt,
       updatedAt: episode.updatedAt,
+      season: PrismaSeasonMapper.toDomain(episode.season),
     });
   }
 }

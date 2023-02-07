@@ -12,12 +12,30 @@ import { GetTvShow } from '@application/use-cases/tvshow/get-tvshow';
 import { Module } from '@nestjs/common';
 import { DatabaseModule } from '../database/database.module';
 //controllers
+import { CreateSeason } from '@application/use-cases/season/create-season';
+import { DeleteSeason } from '@application/use-cases/season/delete-season';
+import { FindManySeason } from '@application/use-cases/season/find-many-season';
+import { GetSeason } from '@application/use-cases/season/get-season';
 import { MoviesController } from './controllers/movies.controller';
+import { SeasonsController } from './controllers/seasons.controller';
 import { TvShowsController } from './controllers/tvshows-controller';
 
 @Module({
   imports: [DatabaseModule],
-  controllers: [MoviesController, TvShowsController],
-  providers: [CreateMovie, FindManyMovie, DeleteMovie, GetMovie, CreateTvShow, FindManyTvShow, DeleteTvShow, GetTvShow],
+  controllers: [MoviesController, TvShowsController, SeasonsController],
+  providers: [
+    CreateMovie,
+    FindManyMovie,
+    DeleteMovie,
+    GetMovie,
+    CreateTvShow,
+    FindManyTvShow,
+    DeleteTvShow,
+    GetTvShow,
+    FindManySeason,
+    GetSeason,
+    CreateSeason,
+    DeleteSeason,
+  ],
 })
 export class HttpModule {}

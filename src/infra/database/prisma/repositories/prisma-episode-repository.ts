@@ -1,8 +1,9 @@
 import { Episode } from '@application/entities/episode';
 import { EpisodeRepository, EpisodeResponse } from '@application/repositories/episode-repository';
+import { Injectable } from '@nestjs/common';
 import { PrismaEpisodeMapper } from '../mappers/prisma-episode-mapper';
 import { PrismaService } from '../prisma.service';
-
+@Injectable()
 export class PrismaEpisodeRepository implements EpisodeRepository {
   constructor(private prisma: PrismaService) {}
   async findById(episodeId: string): Promise<Episode | null> {
@@ -13,7 +14,11 @@ export class PrismaEpisodeRepository implements EpisodeRepository {
   }
   async findMany(skip: number, take: number): Promise<EpisodeResponse> {
     const [episodes, count] = await this.prisma.$transaction([
-      this.prisma.episode.findMany({ skip: skip, take: take }),
+      this.prisma.episode.findMany({
+        skip: skip,
+        take: take,
+        include: { season: true },
+      }),
       this.prisma.episode.count({ skip: undefined, take: undefined }),
     ]);
 
@@ -22,10 +27,13 @@ export class PrismaEpisodeRepository implements EpisodeRepository {
       episodes: episodes.map(PrismaEpisodeMapper.toDomain),
     };
   }
-  async create(episode: Episode): Promise<void> {
+  async create(episode: Episode, seasonId: string): Promise<void> {
     const raw = PrismaEpisodeMapper.toPrisma(episode);
     await this.prisma.episode.create({
-      data: raw,
+      data: {
+        ...raw,
+        season: { connect: { id: seasonId } },
+      },
     });
   }
 

@@ -5,6 +5,7 @@ import { Injectable } from '@nestjs/common';
 interface FindManyEpisodeRequest {
   skip?: number;
   take: number;
+  seasonId: string;
 }
 
 type FindManyEpisodeResponse = {
@@ -16,9 +17,9 @@ export class FindManyEpisode {
   constructor(private episodeRepository: EpisodeRepository) {}
 
   async execute(request: FindManyEpisodeRequest): Promise<FindManyEpisodeResponse> {
-    const { skip, take } = request;
+    const { skip, take, seasonId } = request;
 
-    const { episodes, total } = await this.episodeRepository.findMany(skip, take);
+    const { episodes, total } = await this.episodeRepository.findMany({ skip, take, seasonId });
 
     return {
       episodes: episodes,
