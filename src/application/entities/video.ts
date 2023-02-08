@@ -3,6 +3,7 @@ import { randomUUID } from 'crypto';
 
 export interface VideoProps {
   id: string;
+  title: string;
   type: string;
   link: string;
   format: string;
@@ -25,6 +26,13 @@ export class Video {
 
   public get id(): string {
     return this._id;
+  }
+
+  public set title(value: string) {
+    this.props.type = value;
+  }
+  public get title(): string {
+    return this.props.type;
   }
 
   public set type(value: string) {
