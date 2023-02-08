@@ -24,7 +24,7 @@ export class Episode {
     this.props = { ...props, createdAt: props.createdAt ?? new Date(), updatedAt: props.updatedAt ?? new Date() };
   }
   public get id(): string {
-    return this.id;
+    return this._id;
   }
   public set title(title: EpisodeTitle) {
     this.props.title = title;

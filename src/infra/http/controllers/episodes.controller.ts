@@ -1,7 +1,8 @@
 import { CreateEpisode } from '@application/use-cases/episode/create-episode';
+import { DeleteEpisode } from '@application/use-cases/episode/delete-episode';
 import { FindManyEpisode } from '@application/use-cases/episode/find-many-episode';
 import { GetEpisode } from '@application/use-cases/episode/get-episode';
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Query } from '@nestjs/common';
 import { EpisodeDTOS } from '../dtos/episode';
 import { EpisodeViewModel } from '../view-models/episode-view-model';
 
@@ -11,6 +12,7 @@ export class EpisodesController {
     private getEpisode: GetEpisode,
     private findManyEpisode: FindManyEpisode,
     private createEpisode: CreateEpisode,
+    private deleteEpisode: DeleteEpisode,
   ) {}
 
   @Get(':id')
@@ -39,5 +41,11 @@ export class EpisodesController {
     });
 
     return { episode: EpisodeViewModel.toHTTP(episode) };
+  }
+
+  @Delete(':id')
+  async remove(@Param('id') id: string) {
+    const episode = await this.deleteEpisode.execute({ episodeId: id });
+    return episode;
   }
 }

@@ -13,6 +13,7 @@ import { Module } from '@nestjs/common';
 import { DatabaseModule } from '../database/database.module';
 //controllers
 import { CreateEpisode } from '@application/use-cases/episode/create-episode';
+import { DeleteEpisode } from '@application/use-cases/episode/delete-episode';
 import { FindManyEpisode } from '@application/use-cases/episode/find-many-episode';
 import { GetEpisode } from '@application/use-cases/episode/get-episode';
 import { CreateSeason } from '@application/use-cases/season/create-season';
@@ -43,6 +44,7 @@ import { TvShowsController } from './controllers/tvshows-controller';
     GetEpisode,
     FindManyEpisode,
     CreateEpisode,
+    DeleteEpisode,
   ],
 })
 export class HttpModule {}
