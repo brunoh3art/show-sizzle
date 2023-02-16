@@ -4,7 +4,7 @@ import { Body, Controller, Delete, Get, Param, Post, Query } from '@nestjs/commo
 
 import { DeleteMovie } from '@application/use-cases/movie/delete-movie';
 import { GetMovie } from '@application/use-cases/movie/get-movie';
-import { ContentDTO } from '../dtos/content';
+import { MovieDTO } from '../dtos/movie';
 import { MovieViewModel } from '../view-models/movie-view-model';
 
 @Controller('movies')
@@ -36,8 +36,8 @@ export class MoviesController {
   }
 
   @Post()
-  async create(@Body() body: ContentDTO) {
-    const { title, original_title, overview, poster_image, background_image, release_date, published } = body;
+  async create(@Body() body: MovieDTO) {
+    const { title, original_title, overview, poster_image, background_image, release_date, published, video } = body;
 
     const { content } = await this.createMovie.execute({
       title,
@@ -47,6 +47,7 @@ export class MoviesController {
       background_image,
       release_date,
       published,
+      video,
     });
 
     return {

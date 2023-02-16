@@ -20,9 +20,11 @@ model Movie {
   background_image String?
   published        Boolean
   genres           Genre[]
+  videos           Video[]
   createdAt        DateTime @default(now()) @db.Timestamptz(6)
   updatedAt        DateTime @default(now()) @db.Timestamptz(6)
 
+  @@index([id, createdAt])
   @@map("movie")
 }
 
@@ -42,6 +44,7 @@ model TvShow {
   createdAt DateTime @default(now()) @db.Timestamptz(6)
   updatedAt DateTime @default(now()) @db.Timestamptz(6)
 
+  @@index([id, createdAt])
   @@map("tvshow")
 }
 
@@ -62,6 +65,7 @@ model Season {
   createdAt DateTime @default(now()) @db.Timestamptz(6)
   updatedAt DateTime @default(now()) @db.Timestamptz(6)
 
+  @@index([id, createdAt])
   @@map("season")
 }
 
@@ -77,12 +81,14 @@ model Episode {
   isPublished      Boolean @default(false)
   // prisma relationships
   season           Season? @relation(fields: [seasonId], references: [id])
+  videos           Video[]
   // prisma relationship ids
   seasonId         String? @db.Uuid
 
   createdAt DateTime @default(now()) @db.Timestamptz(6)
   updatedAt DateTime @default(now()) @db.Timestamptz(6)
 
+  @@index([id, createdAt])
   @@map("episode")
 }
 
@@ -100,5 +106,26 @@ model Genre {
   createdAt DateTime @default(now()) @db.Timestamptz(6)
   updatedAt DateTime @default(now()) @db.Timestamptz(6)
 
+  @@index([id, createdAt])
   @@map("genre")
+}
+
+// prisma model for the videos of the movie and episode
+model Video {
+  id     String @id @unique
+  title  String
+  type   String
+  format String
+  link   String
+
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @default(now()) @db.Timestamptz(6)
+
+  movie     Movie?   @relation(fields: [movieId], references: [id])
+  movieId   String?  @db.Uuid
+  episode   Episode? @relation(fields: [episodeId], references: [id])
+  episodeId String?  @db.Uuid
+
+  @@index([id, createdAt])
+  @@map("video")
 }

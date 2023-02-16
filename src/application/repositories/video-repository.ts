@@ -5,6 +5,7 @@ type VideoProps = {
 };
 export abstract class VideoRepository {
   abstract findById(videoId: string): Promise<Video | null>;
+  abstract findMany(findManyById: string): Promise<Video[]>;
   abstract create(video: Video): Promise<void>;
   abstract save({ videoId, content }: VideoProps): Promise<void>;
   abstract remove(videoId: string): Promise<void>;
