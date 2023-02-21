@@ -1,7 +1,6 @@
 import { MovieRepository } from '@application/repositories/movie-repository';
 import { Injectable } from '@nestjs/common';
 import { Content, Title } from '../../entities/content';
-import { CreateVideo } from '../video/create-video';
 
 interface CreateVideoRequest {
   title: string;
@@ -26,7 +25,7 @@ interface CreateMovieResponse {
 }
 @Injectable()
 export class CreateMovie {
-  constructor(private contentRepository: MovieRepository, private createVideo: CreateVideo) {}
+  constructor(private contentRepository: MovieRepository) {}
 
   async execute(request: CreateMovieRequest): Promise<CreateMovieResponse> {
     const { title, original_title, overview, release_date, poster_image, background_image, published, video } = request;
@@ -42,11 +41,6 @@ export class CreateMovie {
     });
 
     await this.contentRepository.create(content);
-
-    await this.createVideo.execute({
-      id: content.id,
-      ...video,
-    });
 
     return { content };
   }

@@ -29,10 +29,10 @@ export class Video {
   }
 
   public set title(value: string) {
-    this.props.type = value;
+    this.props.title = value;
   }
   public get title(): string {
-    return this.props.type;
+    return this.props.title;
   }
 
   public set type(value: string) {

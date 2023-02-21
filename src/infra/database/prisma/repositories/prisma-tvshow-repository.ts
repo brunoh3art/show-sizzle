@@ -2,6 +2,7 @@ import { Content } from '@application/entities/content';
 import { TvShowRepository, TvShowResponse } from '@application/repositories/tvshow-repository';
 import { Injectable } from '@nestjs/common';
 import { PrismaContentMapper } from '../mappers/prisma-content-mapper';
+import { PrismaTvShowMapper } from '../mappers/prisma-tvshow-mapper';
 import { PrismaService } from '../prisma.service';
 
 @Injectable()
@@ -12,7 +13,18 @@ export class PrismaTvShowRepository implements TvShowRepository {
     const tvShow = await this.prisma.tvShow.findUnique({ where: { id: content } });
     if (!tvShow) return null;
 
-    return PrismaContentMapper.toDomain(tvShow);
+    return PrismaTvShowMapper.toDomain({
+      id: tvShow.id,
+      title: tvShow.title,
+      original_title: tvShow.original_title,
+      overview: tvShow.overview,
+      release_date: tvShow.release_date,
+      poster_image: tvShow.poster_image,
+      background_image: tvShow.background_image,
+      published: tvShow.published,
+      createdAt: tvShow.createdAt,
+      updatedAt: tvShow.updatedAt,
+    });
   }
 
   async findMany(skip: number, take: number): Promise<TvShowResponse> {
@@ -30,7 +42,7 @@ export class PrismaTvShowRepository implements TvShowRepository {
 
     return {
       total: count,
-      content: items.map((item) => PrismaContentMapper.toDomain(item)),
+      content: items.map((item) => PrismaTvShowMapper.toDomain(item)),
     };
   }
 

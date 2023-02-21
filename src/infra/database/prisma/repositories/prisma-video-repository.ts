@@ -22,10 +22,14 @@ export class PrismaVideoRepository implements VideoRepository {
             id: findManyById,
           },
           {
-            movieId: findManyById,
+            movie: {
+              every: { id: findManyById },
+            },
           },
           {
-            episodeId: findManyById,
+            episode: {
+              every: { id: findManyById },
+            },
           },
         ],
       },
@@ -34,26 +38,26 @@ export class PrismaVideoRepository implements VideoRepository {
     return videos.map(PrismaVideoMapper.toDomain);
   }
 
-  async create(video: Video): Promise<void> {
-    const raw = PrismaVideoMapper.toPrisma(video);
-    const connectToRelationship =
-      raw.format == 'movie'
-        ? {
-            movie: {
-              connect: { id: raw.id },
-            },
-          }
-        : {
-            episode: {
-              connect: { id: raw.id },
-            },
-          };
+  async create(content: Video): Promise<void> {
     await this.prisma.video.create({
-      data: {
-        ...raw,
-        ...connectToRelationship,
-      },
+      data: content,
     });
+
+    //const raw = PrismaVideoMapper.toPrisma(video);
+    /*
+    const connectToRelationship =
+      raw.type == 'movie' ? { movie: { connect: { id: raw.id } } } : { episode: { connect: { id: raw.id } } };
+
+    console.log({ ...raw, ...connectToRelationship });*/
+    /*await this.prisma.video.create({
+      data: {
+        id: 'raw.id',
+        format: 'raw.format',
+        type: 'raw.type',
+        title: 'raw.title',
+        link: 'raw.link',
+      },
+    });*/
   }
   async save({ videoId, content }: { videoId: string; content: Video }): Promise<void> {
     const raw = PrismaVideoMapper.toPrisma(content);

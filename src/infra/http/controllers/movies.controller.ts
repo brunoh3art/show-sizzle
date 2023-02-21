@@ -47,7 +47,12 @@ export class MoviesController {
       background_image,
       release_date,
       published,
-      video,
+      video: {
+        type: 'movie',
+        title: video.title,
+        format: video.format,
+        link: video.link,
+      },
     });
 
     return {

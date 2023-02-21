@@ -11,7 +11,7 @@ datasource db {
 }
 
 model Movie {
-  id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id               String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   title            String
   original_title   String
   overview         String?
@@ -20,9 +20,11 @@ model Movie {
   background_image String?
   published        Boolean
   genres           Genre[]
-  videos           Video[]
-  createdAt        DateTime @default(now()) @db.Timestamptz(6)
-  updatedAt        DateTime @default(now()) @db.Timestamptz(6)
+  video            Video?  @relation(fields: [videoId], references: [id])
+
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @default(now()) @db.Timestamptz(6)
+  videoId   String?
 
   @@index([id, createdAt])
   @@map("movie")
@@ -81,12 +83,14 @@ model Episode {
   isPublished      Boolean @default(false)
   // prisma relationships
   season           Season? @relation(fields: [seasonId], references: [id])
-  videos           Video[]
+  video            Video?  @relation(fields: [videoId], references: [id])
+
   // prisma relationship ids
-  seasonId         String? @db.Uuid
+  seasonId String? @db.Uuid
 
   createdAt DateTime @default(now()) @db.Timestamptz(6)
   updatedAt DateTime @default(now()) @db.Timestamptz(6)
+  videoId   String?
 
   @@index([id, createdAt])
   @@map("episode")
@@ -112,19 +116,16 @@ model Genre {
 
 // prisma model for the videos of the movie and episode
 model Video {
-  id     String @id @unique
+  id     String  @id @unique
   title  String
   type   String
   format String
   link   String
+  movie  Movie[]
 
-  createdAt DateTime @default(now()) @db.Timestamptz(6)
-  updatedAt DateTime @default(now()) @db.Timestamptz(6)
-
-  movie     Movie?   @relation(fields: [movieId], references: [id])
-  movieId   String?  @db.Uuid
-  episode   Episode? @relation(fields: [episodeId], references: [id])
-  episodeId String?  @db.Uuid
+  createdAt DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime  @default(now()) @db.Timestamptz(6)
+  episode   Episode[]
 
   @@index([id, createdAt])
   @@map("video")
