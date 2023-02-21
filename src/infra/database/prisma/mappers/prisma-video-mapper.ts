@@ -1,6 +1,6 @@
 import { Video } from '@application/entities/video';
 
-import { Video as PrismaVideo } from '@prisma/client';
+import { Media as PrismaVideo } from '@prisma/client';
 
 export class PrismaVideoMapper {
   static toPrisma(video: Video) {

@@ -5,6 +5,7 @@ import { TvShowRepository } from '@application/repositories/tvshow-repository';
 import { VideoRepository } from '@application/repositories/video-repository';
 import { Module } from '@nestjs/common';
 import { PrismaService } from './prisma/prisma.service';
+
 import { PrismaEpisodeRepository } from './prisma/repositories/prisma-episode-repository';
 import { PrismaMovieRepository } from './prisma/repositories/prisma-movie-repository';
 import { PrismaSeasonRepository } from './prisma/repositories/prisma-season-repository';

@@ -4,6 +4,7 @@ import { Body, Controller, Delete, Get, Param, Post, Query } from '@nestjs/commo
 
 import { DeleteMovie } from '@application/use-cases/movie/delete-movie';
 import { GetMovie } from '@application/use-cases/movie/get-movie';
+import { CreateVideo } from '@application/use-cases/video/create-video';
 import { MovieDTO } from '../dtos/movie';
 import { MovieViewModel } from '../view-models/movie-view-model';
 
@@ -14,6 +15,7 @@ export class MoviesController {
     private readonly findManyMovie: FindManyMovie,
     private readonly deleteMovie: DeleteMovie,
     private readonly getMovie: GetMovie,
+    private readonly createVideo: CreateVideo,
   ) {}
 
   @Get()
@@ -53,6 +55,14 @@ export class MoviesController {
         format: video.format,
         link: video.link,
       },
+    });
+
+    const { video: myVideo } = await this.createVideo.execute({
+      id: content.id,
+      type: 'movie',
+      title: video.title,
+      format: video.format,
+      link: video.link,
     });
 
     return {

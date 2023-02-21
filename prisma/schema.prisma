@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,7 +8,7 @@ datasource db {
 }
 
 model Movie {
-  id               String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   title            String
   original_title   String
   overview         String?
@@ -19,12 +16,11 @@ model Movie {
   poster_image     String?
   background_image String?
   published        Boolean
+  createdAt        DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt        DateTime @default(now()) @db.Timestamptz(6)
+  videoId          String?
   genres           Genre[]
-  video            Video?  @relation(fields: [videoId], references: [id])
-
-  createdAt DateTime @default(now()) @db.Timestamptz(6)
-  updatedAt DateTime @default(now()) @db.Timestamptz(6)
-  videoId   String?
+  video            Media?   @relation(fields: [videoId], references: [id])
 
   @@index([id, createdAt])
   @@map("movie")
@@ -39,12 +35,10 @@ model TvShow {
   poster_image     String?
   background_image String?
   published        Boolean
-  // prisma relationships
+  createdAt        DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt        DateTime @default(now()) @db.Timestamptz(6)
   genres           Genre[]
   seasons          Season[]
-
-  createdAt DateTime @default(now()) @db.Timestamptz(6)
-  updatedAt DateTime @default(now()) @db.Timestamptz(6)
 
   @@index([id, createdAt])
   @@map("tvshow")
@@ -58,75 +52,60 @@ model Season {
   poster_image    String?
   release_date    String?
   isPublished     Boolean   @default(false)
-  // prisma relationships
-  episodes        Episode[]
-  // prisma relationship ids
-  tvshow          TvShow?   @relation(fields: [tvshowId], references: [id])
+  createdAt       DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt       DateTime  @default(now()) @db.Timestamptz(6)
   tvshowId        String?   @db.Uuid
-
-  createdAt DateTime @default(now()) @db.Timestamptz(6)
-  updatedAt DateTime @default(now()) @db.Timestamptz(6)
+  episodes        Episode[]
+  tvshow          TvShow?   @relation(fields: [tvshowId], references: [id])
 
   @@index([id, createdAt])
   @@map("season")
 }
 
-// prisma model for the episode
-
 model Episode {
-  id               String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   title            String
-  overview         String?
   episode_number   Int
   release_date     String?
+  seasonId         String?  @db.Uuid
+  createdAt        DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt        DateTime @default(now()) @db.Timestamptz(6)
+  overview         String?
   background_image String?
-  isPublished      Boolean @default(false)
-  // prisma relationships
-  season           Season? @relation(fields: [seasonId], references: [id])
-  video            Video?  @relation(fields: [videoId], references: [id])
-
-  // prisma relationship ids
-  seasonId String? @db.Uuid
-
-  createdAt DateTime @default(now()) @db.Timestamptz(6)
-  updatedAt DateTime @default(now()) @db.Timestamptz(6)
-  videoId   String?
+  isPublished      Boolean  @default(false)
+  videoId          String?
+  season           Season?  @relation(fields: [seasonId], references: [id])
+  video            Media?   @relation(fields: [videoId], references: [id])
 
   @@index([id, createdAt])
   @@map("episode")
 }
 
-// prisma model for the genres of the current tvshow
 model Genre {
-  id       String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  title    String
-  // prisma relationships
-  movie    Movie?  @relation(fields: [movieId], references: [id])
-  tvshow   TvShow? @relation(fields: [tvShowId], references: [id])
-  // prisma relationship ids
-  movieId  String? @db.Uuid
-  tvShowId String? @db.Uuid
-
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title     String
+  movieId   String?  @db.Uuid
+  tvShowId  String?  @db.Uuid
   createdAt DateTime @default(now()) @db.Timestamptz(6)
   updatedAt DateTime @default(now()) @db.Timestamptz(6)
+  movie     Movie?   @relation(fields: [movieId], references: [id])
+  tvshow    TvShow?  @relation(fields: [tvShowId], references: [id])
 
   @@index([id, createdAt])
   @@map("genre")
 }
 
-// prisma model for the videos of the movie and episode
-model Video {
-  id     String  @id @unique
-  title  String
-  type   String
-  format String
-  link   String
-  movie  Movie[]
-
+model Media {
+  id        String    @id
+  title     String
+  type      String
+  format    String
+  link      String
   createdAt DateTime  @default(now()) @db.Timestamptz(6)
   updatedAt DateTime  @default(now()) @db.Timestamptz(6)
   episode   Episode[]
+  movie     Movie[]
 
   @@index([id, createdAt])
-  @@map("video")
+  @@map("media")
 }

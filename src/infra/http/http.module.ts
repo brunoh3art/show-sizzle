@@ -20,31 +20,39 @@ import { CreateSeason } from '@application/use-cases/season/create-season';
 import { DeleteSeason } from '@application/use-cases/season/delete-season';
 import { FindManySeason } from '@application/use-cases/season/find-many-season';
 import { GetSeason } from '@application/use-cases/season/get-season';
+import { CreateVideo } from '@application/use-cases/video/create-video';
 import { EpisodesController } from './controllers/episodes.controller';
+import { MediaController } from './controllers/media-controller';
 import { MoviesController } from './controllers/movies.controller';
 import { SeasonsController } from './controllers/seasons.controller';
 import { TvShowsController } from './controllers/tvshows-controller';
 
 @Module({
   imports: [DatabaseModule],
-  controllers: [MoviesController, TvShowsController, SeasonsController, EpisodesController],
+  controllers: [MoviesController, TvShowsController, SeasonsController, EpisodesController, MediaController],
   providers: [
+    // use case Controller & Movie
     CreateMovie,
     FindManyMovie,
     DeleteMovie,
     GetMovie,
+    // use case Controller & TvShow
     CreateTvShow,
     FindManyTvShow,
     DeleteTvShow,
     GetTvShow,
+    // use case Season & Controller
     FindManySeason,
     GetSeason,
     CreateSeason,
     DeleteSeason,
+    // use case Episode & Controller
     GetEpisode,
     FindManyEpisode,
     CreateEpisode,
     DeleteEpisode,
+    // use case video
+    CreateVideo,
   ],
 })
 export class HttpModule {}

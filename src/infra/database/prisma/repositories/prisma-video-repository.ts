@@ -7,7 +7,7 @@ export class PrismaVideoRepository implements VideoRepository {
   constructor(private prisma: PrismaService) {}
 
   async findById(videoId: string): Promise<Video | null> {
-    const video = await this.prisma.video.findUnique({
+    const video = await this.prisma.media.findUnique({
       where: { id: videoId },
     });
     if (!video) return null;
@@ -15,7 +15,7 @@ export class PrismaVideoRepository implements VideoRepository {
     return PrismaVideoMapper.toDomain(video);
   }
   async findMany(findManyById: string): Promise<Video[]> {
-    const videos = await this.prisma.video.findMany({
+    const videos = await this.prisma.media.findMany({
       where: {
         OR: [
           {
@@ -39,11 +39,21 @@ export class PrismaVideoRepository implements VideoRepository {
   }
 
   async create(content: Video): Promise<void> {
-    await this.prisma.video.create({
-      data: content,
+    // const raw = PrismaVideoMapper.toPrisma(content);
+    //console.log({ raw });
+
+    await this.prisma.media.create({
+      data: {
+        id: '1c0a2e5f-0309-4120-927d-4e208594fb97',
+        title: 'servidor 1',
+        type: 'movie',
+        format: 'mp4',
+        link: 'http://exemplo.com/video.mp4',
+        movie: { connect: { id: '1c0a2e5f-0309-4120-927d-4e208594fb97' } },
+      },
     });
 
-    //const raw = PrismaVideoMapper.toPrisma(video);
+    //
     /*
     const connectToRelationship =
       raw.type == 'movie' ? { movie: { connect: { id: raw.id } } } : { episode: { connect: { id: raw.id } } };
@@ -59,15 +69,16 @@ export class PrismaVideoRepository implements VideoRepository {
       },
     });*/
   }
+
   async save({ videoId, content }: { videoId: string; content: Video }): Promise<void> {
     const raw = PrismaVideoMapper.toPrisma(content);
-    await this.prisma.video.updateMany({
+    await this.prisma.media.updateMany({
       where: { id: videoId },
       data: raw,
     });
   }
 
   async remove(videoId: string): Promise<void> {
-    await this.prisma.video.delete({ where: { id: videoId } });
+    await this.prisma.media.delete({ where: { id: videoId } });
   }
 }
