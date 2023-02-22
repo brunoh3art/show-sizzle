@@ -1,6 +1,6 @@
 -- CreateTable
 CREATE TABLE "movie" (
-    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "id" TEXT NOT NULL DEFAULT gen_random_uuid(),
     "title" TEXT NOT NULL,
     "original_title" TEXT NOT NULL,
     "overview" TEXT,
@@ -17,7 +17,7 @@ CREATE TABLE "movie" (
 
 -- CreateTable
 CREATE TABLE "tvshow" (
-    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "id" TEXT NOT NULL DEFAULT gen_random_uuid(),
     "title" TEXT NOT NULL,
     "original_title" TEXT NOT NULL,
     "overview" TEXT,
@@ -33,7 +33,7 @@ CREATE TABLE "tvshow" (
 
 -- CreateTable
 CREATE TABLE "season" (
-    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "id" TEXT NOT NULL DEFAULT gen_random_uuid(),
     "title" TEXT NOT NULL,
     "season_number" INTEGER NOT NULL,
     "season_overview" TEXT,
@@ -42,18 +42,18 @@ CREATE TABLE "season" (
     "isPublished" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "tvshowId" UUID,
+    "tvshowId" TEXT,
 
     CONSTRAINT "season_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "episode" (
-    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "id" TEXT NOT NULL DEFAULT gen_random_uuid(),
     "title" TEXT NOT NULL,
     "episode_number" INTEGER NOT NULL,
     "release_date" TEXT,
-    "seasonId" UUID,
+    "seasonId" TEXT,
     "createdAt" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "overview" TEXT,
@@ -66,10 +66,10 @@ CREATE TABLE "episode" (
 
 -- CreateTable
 CREATE TABLE "genre" (
-    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "id" TEXT NOT NULL DEFAULT gen_random_uuid(),
     "title" TEXT NOT NULL,
-    "movieId" UUID,
-    "tvShowId" UUID,
+    "movieId" TEXT,
+    "tvShowId" TEXT,
     "createdAt" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
@@ -78,7 +78,7 @@ CREATE TABLE "genre" (
 
 -- CreateTable
 CREATE TABLE "media" (
-    "id" TEXT NOT NULL,
+    "id" TEXT NOT NULL DEFAULT gen_random_uuid(),
     "title" TEXT NOT NULL,
     "type" TEXT NOT NULL,
     "format" TEXT NOT NULL,
@@ -90,16 +90,31 @@ CREATE TABLE "media" (
 );
 
 -- CreateIndex
+CREATE UNIQUE INDEX "movie_id_key" ON "movie"("id");
+
+-- CreateIndex
 CREATE INDEX "movie_id_createdAt_idx" ON "movie"("id", "createdAt");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "tvshow_id_key" ON "tvshow"("id");
 
 -- CreateIndex
 CREATE INDEX "tvshow_id_createdAt_idx" ON "tvshow"("id", "createdAt");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "season_id_key" ON "season"("id");
+
+-- CreateIndex
 CREATE INDEX "season_id_createdAt_idx" ON "season"("id", "createdAt");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "episode_id_key" ON "episode"("id");
+
+-- CreateIndex
 CREATE INDEX "episode_id_createdAt_idx" ON "episode"("id", "createdAt");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "genre_id_key" ON "genre"("id");
 
 -- CreateIndex
 CREATE INDEX "genre_id_createdAt_idx" ON "genre"("id", "createdAt");

@@ -1,8 +1,10 @@
 import { Video } from '@application/entities/video';
 import { VideoRepository } from '@application/repositories/video-repository';
+import { Injectable } from '@nestjs/common';
 import { PrismaVideoMapper } from '../mappers/prisma-video-mapper';
 import { PrismaService } from '../prisma.service';
 
+@Injectable()
 export class PrismaVideoRepository implements VideoRepository {
   constructor(private prisma: PrismaService) {}
 
@@ -39,35 +41,14 @@ export class PrismaVideoRepository implements VideoRepository {
   }
 
   async create(content: Video): Promise<void> {
-    // const raw = PrismaVideoMapper.toPrisma(content);
-    //console.log({ raw });
+    const raw = PrismaVideoMapper.toPrisma(content);
 
-    await this.prisma.media.create({
-      data: {
-        id: '1c0a2e5f-0309-4120-927d-4e208594fb97',
-        title: 'servidor 1',
-        type: 'movie',
-        format: 'mp4',
-        link: 'http://exemplo.com/video.mp4',
-        movie: { connect: { id: '1c0a2e5f-0309-4120-927d-4e208594fb97' } },
-      },
-    });
-
-    //
-    /*
     const connectToRelationship =
       raw.type == 'movie' ? { movie: { connect: { id: raw.id } } } : { episode: { connect: { id: raw.id } } };
 
-    console.log({ ...raw, ...connectToRelationship });*/
-    /*await this.prisma.video.create({
-      data: {
-        id: 'raw.id',
-        format: 'raw.format',
-        type: 'raw.type',
-        title: 'raw.title',
-        link: 'raw.link',
-      },
-    });*/
+    await this.prisma.media.create({
+      data: { ...raw, ...connectToRelationship },
+    });
   }
 
   async save({ videoId, content }: { videoId: string; content: Video }): Promise<void> {

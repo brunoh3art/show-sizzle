@@ -15,10 +15,11 @@ export class Video {
   private _id: string;
   private props: VideoProps;
 
-  constructor(props: Replace<VideoProps, { createdAt?: Date; updatedAt?: Date }>, id?: string) {
+  constructor(props: Replace<VideoProps, { createdAt?: Date; updatedAt?: Date; id?: string }>, id?: string) {
     this._id = id ?? randomUUID();
     this.props = {
       ...props,
+      id: id ?? this._id,
       createdAt: props.createdAt ?? new Date(),
       updatedAt: props.updatedAt ?? new Date(),
     };

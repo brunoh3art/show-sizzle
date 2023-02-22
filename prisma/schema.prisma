@@ -8,7 +8,7 @@ datasource db {
 }
 
 model Movie {
-  id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id               String   @id @default(cuid())
   title            String
   original_title   String
   overview         String?
@@ -19,15 +19,16 @@ model Movie {
   createdAt        DateTime @default(now()) @db.Timestamptz(6)
   updatedAt        DateTime @default(now()) @db.Timestamptz(6)
   videoId          String?
-  genres           Genre[]
-  video            Media?   @relation(fields: [videoId], references: [id])
+
+  genres Genre[]
+  video  Media?  @relation(fields: [videoId], references: [id])
 
   @@index([id, createdAt])
   @@map("movie")
 }
 
 model TvShow {
-  id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id               String   @id
   title            String
   original_title   String
   overview         String?
@@ -45,7 +46,7 @@ model TvShow {
 }
 
 model Season {
-  id              String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id              String    @id
   title           String
   season_number   Int
   season_overview String?
@@ -54,7 +55,7 @@ model Season {
   isPublished     Boolean   @default(false)
   createdAt       DateTime  @default(now()) @db.Timestamptz(6)
   updatedAt       DateTime  @default(now()) @db.Timestamptz(6)
-  tvshowId        String?   @db.Uuid
+  tvshowId        String?
   episodes        Episode[]
   tvshow          TvShow?   @relation(fields: [tvshowId], references: [id])
 
@@ -63,11 +64,11 @@ model Season {
 }
 
 model Episode {
-  id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id               String   @id
   title            String
   episode_number   Int
   release_date     String?
-  seasonId         String?  @db.Uuid
+  seasonId         String?
   createdAt        DateTime @default(now()) @db.Timestamptz(6)
   updatedAt        DateTime @default(now()) @db.Timestamptz(6)
   overview         String?
@@ -82,21 +83,22 @@ model Episode {
 }
 
 model Genre {
-  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id        String   @id
   title     String
-  movieId   String?  @db.Uuid
-  tvShowId  String?  @db.Uuid
+  movieId   String?
+  tvShowId  String?
   createdAt DateTime @default(now()) @db.Timestamptz(6)
   updatedAt DateTime @default(now()) @db.Timestamptz(6)
-  movie     Movie?   @relation(fields: [movieId], references: [id])
-  tvshow    TvShow?  @relation(fields: [tvShowId], references: [id])
+
+  tvshow TvShow? @relation(fields: [tvShowId], references: [id])
+  movie  Movie?  @relation(fields: [movieId], references: [id])
 
   @@index([id, createdAt])
   @@map("genre")
 }
 
 model Media {
-  id        String    @id
+  id        String    @id @default(cuid())
   title     String
   type      String
   format    String

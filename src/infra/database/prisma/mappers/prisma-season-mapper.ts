@@ -12,6 +12,7 @@ export class PrismaSeasonMapper {
       isPublished: season.isPublished,
       createdAt: season.createdAt,
       updatedAt: season.updatedAt,
+      id: season.id,
     };
   }
 

@@ -15,6 +15,7 @@ export class PrismaEpisodeMapper {
       isPublished: episode.isPublished,
       createdAt: episode.createdAt,
       updatedAt: episode.updatedAt,
+      id: episode.id,
     };
   }
 

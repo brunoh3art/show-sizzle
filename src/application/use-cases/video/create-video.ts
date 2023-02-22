@@ -16,20 +16,22 @@ interface CreateVideoResponse {
 
 @Injectable()
 export class CreateVideo {
-  constructor(private contentRepository: VideoRepository) {}
+  constructor(private videoRepository: VideoRepository) {}
 
   async execute(request: CreateVideoRequest): Promise<CreateVideoResponse> {
     const { title, type, link, id, format } = request;
 
-    const video = new Video({
-      title,
-      type,
-      link,
+    const video = new Video(
+      {
+        title,
+        type,
+        link,
+        format,
+      },
       id,
-      format,
-    });
+    );
 
-    await this.contentRepository.create(video);
+    await this.videoRepository.create(video);
 
     return { video };
   }
