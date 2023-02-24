@@ -49,15 +49,9 @@ export class MoviesController {
       background_image,
       release_date,
       published,
-      video: {
-        type: 'movie',
-        title: video.title,
-        format: video.format,
-        link: video.link,
-      },
     });
 
-    const { video: myVideo } = await this.createVideo.execute({
+    const { video: Media } = await this.createVideo.execute({
       id: content.id,
       type: 'movie',
       title: video.title,
@@ -67,6 +61,7 @@ export class MoviesController {
 
     return {
       content: MovieViewModel.toHTTP(content),
+      video: Media,
     };
   }
 

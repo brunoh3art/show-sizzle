@@ -18,7 +18,6 @@ interface CreateMovieRequest {
   poster_image?: string;
   background_image?: string;
   published: boolean;
-  video: CreateVideoRequest;
 }
 
 interface CreateMovieResponse {
@@ -29,7 +28,7 @@ export class CreateMovie {
   constructor(private contentRepository: MovieRepository, private readonly createVideo: CreateVideo) {}
 
   async execute(request: CreateMovieRequest): Promise<CreateMovieResponse> {
-    const { title, original_title, overview, release_date, poster_image, background_image, published, video } = request;
+    const { title, original_title, overview, release_date, poster_image, background_image, published } = request;
 
     const content = new Content({
       title: new Title(title),
@@ -42,11 +41,6 @@ export class CreateMovie {
     });
 
     await this.contentRepository.create(content);
-
-    await this.createVideo.execute({
-      ...video,
-      id: content.id,
-    });
 
     return { content };
   }

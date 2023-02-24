@@ -8,7 +8,7 @@ datasource db {
 }
 
 model Movie {
-  id               String   @id @default(cuid())
+  id               String   @id
   title            String
   original_title   String
   overview         String?
@@ -98,7 +98,7 @@ model Genre {
 }
 
 model Media {
-  id        String    @id @default(cuid())
+  id        String    @id
   title     String
   type      String
   format    String
