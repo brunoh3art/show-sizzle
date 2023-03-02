@@ -1,6 +1,8 @@
 import { Video } from '@application/entities/video';
-import { VideoRepository } from '@application/repositories/video-repository';
+import { VideoRepository, VideoResponse } from '@application/repositories/video-repository';
 import { Injectable } from '@nestjs/common';
+import { PrismaContentMapper } from '../mappers/prisma-content-mapper';
+import { PrismaEpisodeMapper } from '../mappers/prisma-episode-mapper';
 import { PrismaVideoMapper } from '../mappers/prisma-video-mapper';
 import { PrismaService } from '../prisma.service';
 
@@ -8,13 +10,34 @@ import { PrismaService } from '../prisma.service';
 export class PrismaVideoRepository implements VideoRepository {
   constructor(private prisma: PrismaService) {}
 
-  async findById(videoId: string): Promise<Video | null> {
+  async findById(videoId: string): Promise<VideoResponse | null> {
     const video = await this.prisma.media.findUnique({
       where: { id: videoId },
+      include: {
+        movie: true,
+        episode: {
+          include: {
+            season: {
+              include: {
+                tvshow: true,
+              },
+            },
+          },
+        },
+      },
     });
     if (!video) return null;
 
-    return PrismaVideoMapper.toDomain(video);
+    return {
+      video: PrismaVideoMapper.toDomain(video),
+      referece: {
+        episode: PrismaEpisodeMapper.toDomain(video.episode[0]),
+        content:
+          video.type == 'movie'
+            ? PrismaContentMapper.toDomain(video.movie[0])
+            : PrismaContentMapper.toDomain(video.episode[0].season.tvshow),
+      },
+    };
   }
   async findMany(findManyById: string): Promise<Video[]> {
     const videos = await this.prisma.media.findMany({

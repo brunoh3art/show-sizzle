@@ -1,4 +1,5 @@
 import { IsBoolean, IsNotEmpty, IsUUID, Length } from 'class-validator';
+import { VideoDTOS } from './video';
 
 export class EpisodeDTOS {
   @IsNotEmpty()
@@ -14,4 +15,5 @@ export class EpisodeDTOS {
   @IsNotEmpty()
   @IsUUID()
   seasonId: string;
+  video: VideoDTOS;
 }

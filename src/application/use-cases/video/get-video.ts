@@ -1,3 +1,5 @@
+import { Content } from '@application/entities/content';
+import { Episode } from '@application/entities/episode';
 import { Video } from '@application/entities/video';
 import { VideoRepository } from '@application/repositories/video-repository';
 import { Injectable } from '@nestjs/common';
@@ -8,6 +10,10 @@ interface GetVideoRequest {
 
 interface GetVideoResponse {
   video: Video;
+  referece: {
+    episode?: Episode | null;
+    content: Content;
+  };
 }
 @Injectable()
 export class GetVideo {
@@ -16,10 +22,11 @@ export class GetVideo {
   async execute(request: GetVideoRequest): Promise<GetVideoResponse> {
     const { videoId } = request;
 
-    const video = await this.contentRepository.findById(videoId);
+    const { video, referece } = await this.contentRepository.findById(videoId);
 
     return {
       video,
+      referece,
     };
   }
 }

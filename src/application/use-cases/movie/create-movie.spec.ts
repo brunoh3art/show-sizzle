@@ -14,7 +14,6 @@ describe('Create movie', () => {
       poster_image: 'string',
       background_image: 'string',
       published: true,
-      video: undefined,
     });
 
     expect(createMovieRepository.movies).toHaveLength(1);

@@ -7,6 +7,7 @@ import { GetMovie } from '@application/use-cases/movie/get-movie';
 import { CreateVideo } from '@application/use-cases/video/create-video';
 import { MovieDTO } from '../dtos/movie';
 import { MovieViewModel } from '../view-models/movie-view-model';
+import { VideoViewModel } from '../view-models/video-view-model';
 
 @Controller('movies')
 export class MoviesController {
@@ -51,7 +52,7 @@ export class MoviesController {
       published,
     });
 
-    const { video: Media } = await this.createVideo.execute({
+    const { video: media } = await this.createVideo.execute({
       id: content.id,
       type: 'movie',
       title: video.title,
@@ -61,7 +62,7 @@ export class MoviesController {
 
     return {
       content: MovieViewModel.toHTTP(content),
-      video: Media,
+      video: VideoViewModel.toHTTP(media),
     };
   }
 
