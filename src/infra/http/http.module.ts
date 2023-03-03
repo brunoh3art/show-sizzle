@@ -21,6 +21,7 @@ import { DeleteSeason } from '@application/use-cases/season/delete-season';
 import { FindManySeason } from '@application/use-cases/season/find-many-season';
 import { GetSeason } from '@application/use-cases/season/get-season';
 import { CreateVideo } from '@application/use-cases/video/create-video';
+import { GetVideo } from '@application/use-cases/video/get-video';
 import { EpisodesController } from './controllers/episodes.controller';
 import { MediaController } from './controllers/media-controller';
 import { MoviesController } from './controllers/movies.controller';
@@ -53,6 +54,7 @@ import { TvShowsController } from './controllers/tvshows-controller';
     DeleteEpisode,
     // use case video
     CreateVideo,
+    GetVideo,
   ],
 })
 export class HttpModule {}

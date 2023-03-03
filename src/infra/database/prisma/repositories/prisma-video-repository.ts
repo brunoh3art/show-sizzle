@@ -26,12 +26,15 @@ export class PrismaVideoRepository implements VideoRepository {
         },
       },
     });
+
+    console.log({ video });
+
     if (!video) return null;
 
     return {
       video: PrismaVideoMapper.toDomain(video),
       referece: {
-        episode: PrismaEpisodeMapper.toDomain(video.episode[0]),
+        episode: video.episode.length > 0 && PrismaEpisodeMapper.toDomain(video.episode[0]),
         content:
           video.type == 'movie'
             ? PrismaContentMapper.toDomain(video.movie[0])

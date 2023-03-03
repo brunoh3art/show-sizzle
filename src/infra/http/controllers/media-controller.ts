@@ -1,24 +1,19 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 
-import { CreateVideo } from '@application/use-cases/video/create-video';
-import { VideoDTOS } from '../dtos/video';
+import { GetVideo } from '@application/use-cases/video/get-video';
+import { VideoViewModel } from '../view-models/video-view-model';
 
 @Controller('media')
 export class MediaController {
-  constructor(private readonly createVideo: CreateVideo) {}
+  constructor(private readonly getMedia: GetVideo) {}
 
-  @Post()
-  async create(@Body() body: VideoDTOS) {
-    const { title, link, format } = body;
+  @Get(':id')
+  async watch(@Param('id') videoId: string) {
+    const { video, referece } = await this.getMedia.execute({ videoId });
 
-    const { video: myVideo } = await this.createVideo.execute({
-      id: 'content.id',
-      type: 'movie',
-      title,
-      format,
-      link,
-    });
-
-    return { myVideo };
+    return {
+      video: VideoViewModel.toHTTP(video),
+      referece: VideoViewModel.toHTTPMetadata(referece),
+    };
   }
 }
