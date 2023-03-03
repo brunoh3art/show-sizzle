@@ -7,7 +7,7 @@ import { MovieViewModel } from './movie-view-model';
 export class VideoViewModel {
   static toHTTP(video: Video) {
     return {
-      title: video.id,
+      title: video.title,
       type: video.type,
       link: video.link,
       format: video.format,

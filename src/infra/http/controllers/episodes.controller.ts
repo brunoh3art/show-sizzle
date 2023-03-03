@@ -6,6 +6,7 @@ import { CreateVideo } from '@application/use-cases/video/create-video';
 import { Body, Controller, Delete, Get, Param, Post, Query } from '@nestjs/common';
 import { EpisodeDTOS } from '../dtos/episode';
 import { EpisodeViewModel } from '../view-models/episode-view-model';
+import { VideoViewModel } from '../view-models/video-view-model';
 
 @Controller('episodes')
 export class EpisodesController {
@@ -42,7 +43,7 @@ export class EpisodesController {
       seasonId,
     });
 
-    const media = await this.createVideo.execute({
+    const { video: media } = await this.createVideo.execute({
       type: 'episode',
       format: video.format,
       link: video.link,
@@ -50,7 +51,7 @@ export class EpisodesController {
       id: episode.id,
     });
 
-    return { episode: EpisodeViewModel.toHTTP(episode) };
+    return { episode: EpisodeViewModel.toHTTP(episode), video: VideoViewModel.toHTTP(media) };
   }
 
   @Delete(':id')
