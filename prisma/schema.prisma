@@ -85,10 +85,11 @@ model Episode {
 model Genre {
   id        String   @id
   title     String
-  movieId   String?
-  tvShowId  String?
   createdAt DateTime @default(now()) @db.Timestamptz(6)
   updatedAt DateTime @default(now()) @db.Timestamptz(6)
+
+  movieId  String?
+  tvShowId String?
 
   tvshow TvShow? @relation(fields: [tvShowId], references: [id])
   movie  Movie?  @relation(fields: [movieId], references: [id])
@@ -110,4 +111,24 @@ model Media {
 
   @@index([id, createdAt])
   @@map("media")
+}
+
+model User {
+  id       String  @id
+  name     String
+  email    String  @unique
+  password String
+  avatar   String?
+
+  role Role @default(USER)
+
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @default(now()) @db.Timestamptz(6)
+
+  @@map("user")
+}
+
+enum Role {
+  USER
+  ADMIN
 }
