@@ -1,6 +1,6 @@
 import { ExtractJwt, Strategy } from 'passport-jwt';
 
-import { APP_AUTH_SECRET } from '@application/config';
+import { APP_AUTH_SECRET } from '@application/configs/config';
 import { User } from '@application/entities/user';
 import { GetUserById } from '@application/use-cases/user/get-user-by-id';
 import { PrismaUserMapper } from '@infra/database/prisma/mappers/prisma-user-mapper';

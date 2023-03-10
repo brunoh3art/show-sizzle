@@ -1,5 +1,5 @@
+import { Jwt } from '@application/configs/jwt';
 import { User } from '@application/entities/user';
-import { Jwt } from '@application/jwt';
 import { UserRepository } from '@application/repositories/user-repository';
 import { Injectable } from '@nestjs/common';
 import * as argon2 from 'argon2';
