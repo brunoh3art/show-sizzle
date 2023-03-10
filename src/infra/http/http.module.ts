@@ -20,19 +20,23 @@ import { CreateSeason } from '@application/use-cases/season/create-season';
 import { DeleteSeason } from '@application/use-cases/season/delete-season';
 import { FindManySeason } from '@application/use-cases/season/find-many-season';
 import { GetSeason } from '@application/use-cases/season/get-season';
+import { GetUserById } from '@application/use-cases/user/get-user-by-id';
 import { UserLogin } from '@application/use-cases/user/user-login';
 import { UserRegister } from '@application/use-cases/user/user-register';
 import { CreateVideo } from '@application/use-cases/video/create-video';
 import { GetVideo } from '@application/use-cases/video/get-video';
+import { PassportModule } from '@nestjs/passport';
 import { AuthController } from './controllers/auth.controller';
 import { EpisodesController } from './controllers/episodes.controller';
 import { MediaController } from './controllers/media-controller';
 import { MoviesController } from './controllers/movies.controller';
 import { SeasonsController } from './controllers/seasons.controller';
 import { TvShowsController } from './controllers/tvshows-controller';
+import { JwtStrategy } from './guards/jwt-strategy-guard';
 
 @Module({
-  imports: [DatabaseModule],
+  imports: [DatabaseModule, PassportModule.register({ defaultStrategy: 'jwt' })],
+  exports: [PassportModule.register({ defaultStrategy: 'jwt' })],
   controllers: [
     MoviesController,
     TvShowsController,
@@ -68,6 +72,9 @@ import { TvShowsController } from './controllers/tvshows-controller';
     // use case User
     UserLogin,
     UserRegister,
+    GetUserById,
+    //JWT token
+    JwtStrategy,
   ],
 })
 export class HttpModule {}
