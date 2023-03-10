@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken';
+import * as jwt from 'jsonwebtoken';
 import { APP_AUTH_SECRET, APP_SECRET } from './config';
 
 type Payload = Record<string, any>;
