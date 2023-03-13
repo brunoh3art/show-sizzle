@@ -1,4 +1,4 @@
 export abstract class AppRepository {
   abstract browse(): any;
-  abstract browseByGenre(title: string, page: number, pageSize: number): any;
+  abstract browseByGenre(title: string, skip: number, take: number): any;
 }

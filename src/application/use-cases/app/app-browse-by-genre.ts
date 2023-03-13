@@ -3,6 +3,8 @@ import { Injectable } from '@nestjs/common';
 
 type AppBrowseByGenreRequest = {
   name: string;
+  skip?: number;
+  take?: number;
 };
 
 @Injectable()
@@ -10,8 +12,8 @@ export class AppBrowseByGenre {
   constructor(private appRepository: AppRepository) {}
 
   async execute(request: AppBrowseByGenreRequest) {
-    const { name } = request;
-    const data = await this.appRepository.browseByGenre(name, 1, 25);
+    const { name, take, skip } = request;
+    const data = await this.appRepository.browseByGenre(name, skip, take);
     return { browse: data };
   }
 

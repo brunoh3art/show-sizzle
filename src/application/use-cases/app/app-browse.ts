@@ -7,7 +7,7 @@ export class AppBrowse {
 
   async execute() {
     const data = await this.appRepository.browse();
-    return { browse: this.groupByCategory(data) };
+    return { browse: data };
   }
 
   private groupByCategory(result: any) {

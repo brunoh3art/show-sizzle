@@ -88,11 +88,10 @@ model Genre {
   createdAt DateTime @default(now()) @db.Timestamptz(6)
   updatedAt DateTime @default(now()) @db.Timestamptz(6)
 
-  movieId  String? @map("movieid")
   tvShowId String? @map("tvshowid")
 
-  tvshow TvShow? @relation(fields: [tvShowId], references: [id])
-  movie  Movie?  @relation(fields: [movieId], references: [id])
+  tvshow TvShow[]
+  movie  Movie[]
 
   @@index([id, createdAt])
   @@map("genre")
