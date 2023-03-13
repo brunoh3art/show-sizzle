@@ -6,7 +6,9 @@ import { VideoRepository } from '@application/repositories/video-repository';
 import { Module } from '@nestjs/common';
 import { PrismaService } from './prisma/prisma.service';
 
+import { AppRepository } from '@application/repositories/app-repository';
 import { UserRepository } from '@application/repositories/user-repository';
+import { PrismaAppRepository } from './prisma/repositories/prisma-app-repository';
 import { PrismaEpisodeRepository } from './prisma/repositories/prisma-episode-repository';
 import { PrismaMovieRepository } from './prisma/repositories/prisma-movie-repository';
 import { PrismaSeasonRepository } from './prisma/repositories/prisma-season-repository';
@@ -41,7 +43,19 @@ import { PrismaVideoRepository } from './prisma/repositories/prisma-video-reposi
       provide: UserRepository,
       useClass: PrismaUserRepository,
     },
+    {
+      provide: AppRepository,
+      useClass: PrismaAppRepository,
+    },
   ],
-  exports: [MovieRepository, TvShowRepository, SeasonRepository, EpisodeRepository, VideoRepository, UserRepository],
+  exports: [
+    MovieRepository,
+    TvShowRepository,
+    SeasonRepository,
+    EpisodeRepository,
+    VideoRepository,
+    UserRepository,
+    AppRepository,
+  ],
 })
 export class DatabaseModule {}

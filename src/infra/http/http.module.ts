@@ -12,6 +12,8 @@ import { GetTvShow } from '@application/use-cases/tvshow/get-tvshow';
 import { Module } from '@nestjs/common';
 import { DatabaseModule } from '../database/database.module';
 //controllers
+import { AppBrowse } from '@application/use-cases/app/app-browse';
+import { AppBrowseByGenre } from '@application/use-cases/app/app-browse-by-genre';
 import { CreateEpisode } from '@application/use-cases/episode/create-episode';
 import { DeleteEpisode } from '@application/use-cases/episode/delete-episode';
 import { FindManyEpisode } from '@application/use-cases/episode/find-many-episode';
@@ -26,6 +28,7 @@ import { UserRegister } from '@application/use-cases/user/user-register';
 import { CreateVideo } from '@application/use-cases/video/create-video';
 import { GetVideo } from '@application/use-cases/video/get-video';
 import { PassportModule } from '@nestjs/passport';
+import { AppController } from './controllers/app.controller';
 import { AuthController } from './controllers/auth.controller';
 import { EpisodesController } from './controllers/episodes.controller';
 import { MediaController } from './controllers/media-controller';
@@ -38,6 +41,7 @@ import { JwtStrategy } from './guards/jwt-strategy-guard';
   imports: [DatabaseModule, PassportModule.register({ defaultStrategy: 'jwt' })],
   exports: [PassportModule.register({ defaultStrategy: 'jwt' })],
   controllers: [
+    AppController,
     MoviesController,
     TvShowsController,
     SeasonsController,
@@ -75,6 +79,9 @@ import { JwtStrategy } from './guards/jwt-strategy-guard';
     GetUserById,
     //JWT token
     JwtStrategy,
+    //APP
+    AppBrowse,
+    AppBrowseByGenre,
   ],
 })
 export class HttpModule {}
