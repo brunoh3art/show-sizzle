@@ -50,13 +50,14 @@ export class PrismaAppRepository implements AppRepository {
       },
     });
 
-    const results = genres.map((g: any) => {
-      const movie = g.movie.slice(0, 25).map(PrismaContentMapper.toDomain);
-      const serie = g.tvshow.slice(0, 25).map(PrismaContentMapper.toDomain);
+    const results = genres
+      .filter(({ movie, tvshow }) => movie.length > 0 || tvshow.length > 0)
+      .map((g: any) => {
+        const movie: [] = g.movie.slice(0, 25).map(PrismaContentMapper.toDomain);
+        const serie: [] = g.tvshow.slice(0, 25).map(PrismaContentMapper.toDomain);
 
-      return { title: g.title, items: [...movie, ...serie] };
-    });
-    console.log({ results });
+        return { title: g.title, items: [...movie, ...serie] };
+      });
 
     return results;
   }

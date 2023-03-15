@@ -37,7 +37,9 @@ export class PrismaMovieRepository implements MovieRepository {
   async create(content: Content): Promise<void> {
     const raw = PrismaContentMapper.toPrisma(content);
     await this.prisma.movie.create({
-      data: raw,
+      data: {
+        ...raw,
+      },
     });
   }
   async save(movieId: string, content: Content): Promise<void> {

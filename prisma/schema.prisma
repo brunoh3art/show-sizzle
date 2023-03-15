@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["views"]
 }
 
 datasource db {
@@ -87,8 +88,6 @@ model Genre {
   title     String
   createdAt DateTime @default(now()) @db.Timestamptz(6)
   updatedAt DateTime @default(now()) @db.Timestamptz(6)
-
-  tvShowId String? @map("tvshowid")
 
   tvshow TvShow[]
   movie  Movie[]
