@@ -85,7 +85,7 @@ model Episode {
 
 model Genre {
   id        String   @id
-  title     String
+  title     String   @unique()
   createdAt DateTime @default(now()) @db.Timestamptz(6)
   updatedAt DateTime @default(now()) @db.Timestamptz(6)
 

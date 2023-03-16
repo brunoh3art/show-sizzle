@@ -7,9 +7,11 @@ import { Module } from '@nestjs/common';
 import { PrismaService } from './prisma/prisma.service';
 
 import { AppRepository } from '@application/repositories/app-repository';
+import { GenreRepository } from '@application/repositories/genre-repository';
 import { UserRepository } from '@application/repositories/user-repository';
 import { PrismaAppRepository } from './prisma/repositories/prisma-app-repository';
 import { PrismaEpisodeRepository } from './prisma/repositories/prisma-episode-repository';
+import { PrismaGenreRepository } from './prisma/repositories/prisma-genre-repository';
 import { PrismaMovieRepository } from './prisma/repositories/prisma-movie-repository';
 import { PrismaSeasonRepository } from './prisma/repositories/prisma-season-repository';
 import { PrismaTvShowRepository } from './prisma/repositories/prisma-tvshow-repository';
@@ -47,6 +49,10 @@ import { PrismaVideoRepository } from './prisma/repositories/prisma-video-reposi
       provide: AppRepository,
       useClass: PrismaAppRepository,
     },
+    {
+      provide: GenreRepository,
+      useClass: PrismaGenreRepository,
+    },
   ],
   exports: [
     MovieRepository,
@@ -56,6 +62,7 @@ import { PrismaVideoRepository } from './prisma/repositories/prisma-video-reposi
     VideoRepository,
     UserRepository,
     AppRepository,
+    GenreRepository,
   ],
 })
 export class DatabaseModule {}

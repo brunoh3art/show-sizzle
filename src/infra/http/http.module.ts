@@ -18,6 +18,7 @@ import { CreateEpisode } from '@application/use-cases/episode/create-episode';
 import { DeleteEpisode } from '@application/use-cases/episode/delete-episode';
 import { FindManyEpisode } from '@application/use-cases/episode/find-many-episode';
 import { GetEpisode } from '@application/use-cases/episode/get-episode';
+import { FindManyGenre } from '@application/use-cases/genre/find-many-genre';
 import { CreateSeason } from '@application/use-cases/season/create-season';
 import { DeleteSeason } from '@application/use-cases/season/delete-season';
 import { FindManySeason } from '@application/use-cases/season/find-many-season';
@@ -31,6 +32,7 @@ import { PassportModule } from '@nestjs/passport';
 import { AppController } from './controllers/app.controller';
 import { AuthController } from './controllers/auth.controller';
 import { EpisodesController } from './controllers/episodes.controller';
+import { GenresController } from './controllers/genres.controller';
 import { MediaController } from './controllers/media-controller';
 import { MoviesController } from './controllers/movies.controller';
 import { SeasonsController } from './controllers/seasons.controller';
@@ -48,6 +50,7 @@ import { JwtStrategy } from './guards/jwt-strategy-guard';
     EpisodesController,
     MediaController,
     AuthController,
+    GenresController,
   ],
   providers: [
     // use case Controller & Movie
@@ -82,6 +85,8 @@ import { JwtStrategy } from './guards/jwt-strategy-guard';
     //APP
     AppBrowse,
     AppBrowseByGenre,
+    //Genres
+    FindManyGenre,
   ],
 })
 export class HttpModule {}
