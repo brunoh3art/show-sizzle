@@ -1,5 +1,6 @@
 import { Genre } from '@application/entities/genre';
 import { GenreRepository } from '@application/repositories/genre-repository';
+import { Injectable } from '@nestjs/common';
 
 interface CreateGenreRequest {
   title: string;
@@ -8,6 +9,7 @@ interface CreateGenreResponse {
   genre: Genre;
 }
 
+@Injectable()
 export class CreateGenre {
   constructor(private genreRepository: GenreRepository) {}
 

@@ -18,6 +18,7 @@ import { CreateEpisode } from '@application/use-cases/episode/create-episode';
 import { DeleteEpisode } from '@application/use-cases/episode/delete-episode';
 import { FindManyEpisode } from '@application/use-cases/episode/find-many-episode';
 import { GetEpisode } from '@application/use-cases/episode/get-episode';
+import { CreateGenre } from '@application/use-cases/genre/create-genre';
 import { FindManyGenre } from '@application/use-cases/genre/find-many-genre';
 import { CreateSeason } from '@application/use-cases/season/create-season';
 import { DeleteSeason } from '@application/use-cases/season/delete-season';
@@ -87,6 +88,7 @@ import { JwtStrategy } from './guards/jwt-strategy-guard';
     AppBrowseByGenre,
     //Genres
     FindManyGenre,
+    CreateGenre,
   ],
 })
 export class HttpModule {}
