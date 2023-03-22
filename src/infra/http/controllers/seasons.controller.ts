@@ -18,7 +18,11 @@ export class SeasonsController {
   @Get(':id')
   async seasons(@Param('id') id: string, @Query() { skip = 0, take = 24 }) {
     const { seasons, total } = await this.findManySeason.execute({ skip, take, tvShowId: id });
-    return { id, seasons: seasons.map(SeasonViewModel.toHTTP), total };
+    return {
+      id,
+      seasons: seasons.map(SeasonViewModel.toHTTP),
+      total,
+    };
   }
 
   @Get('details/:id')

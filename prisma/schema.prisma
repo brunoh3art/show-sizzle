@@ -17,8 +17,8 @@ model Movie {
   poster_image     String?
   background_image String?
   published        Boolean
-  createdAt        DateTime @default(now()) @db.Timestamptz(6)
-  updatedAt        DateTime @default(now()) @db.Timestamptz(6)
+  createdAt        DateTime
+  updatedAt        DateTime
   videoId          String?
 
   genres Genre[]
@@ -37,8 +37,8 @@ model TvShow {
   poster_image     String?
   background_image String?
   published        Boolean
-  createdAt        DateTime @default(now()) @db.Timestamptz(6)
-  updatedAt        DateTime @default(now()) @db.Timestamptz(6)
+  createdAt        DateTime
+  updatedAt        DateTime
   genres           Genre[]
   seasons          Season[]
 
@@ -54,8 +54,8 @@ model Season {
   poster_image    String?
   release_date    String?
   isPublished     Boolean   @default(false)
-  createdAt       DateTime  @default(now()) @db.Timestamptz(6)
-  updatedAt       DateTime  @default(now()) @db.Timestamptz(6)
+  createdAt       DateTime
+  updatedAt       DateTime
   tvshowId        String?
   episodes        Episode[]
   tvshow          TvShow?   @relation(fields: [tvshowId], references: [id])
@@ -70,8 +70,8 @@ model Episode {
   episode_number   Int
   release_date     String?
   seasonId         String?
-  createdAt        DateTime @default(now()) @db.Timestamptz(6)
-  updatedAt        DateTime @default(now()) @db.Timestamptz(6)
+  createdAt        DateTime
+  updatedAt        DateTime
   overview         String?
   background_image String?
   isPublished      Boolean  @default(false)
@@ -86,8 +86,8 @@ model Episode {
 model Genre {
   id        String   @id
   title     String   @unique()
-  createdAt DateTime @default(now()) @db.Timestamptz(6)
-  updatedAt DateTime @default(now()) @db.Timestamptz(6)
+  createdAt DateTime
+  updatedAt DateTime
 
   tvshow TvShow[]
   movie  Movie[]
@@ -102,8 +102,8 @@ model Media {
   type      String
   format    String
   link      String
-  createdAt DateTime  @default(now()) @db.Timestamptz(6)
-  updatedAt DateTime  @default(now()) @db.Timestamptz(6)
+  createdAt DateTime
+  updatedAt DateTime
   episode   Episode[]
   movie     Movie[]
 
@@ -120,8 +120,8 @@ model User {
 
   role Role @default(USER)
 
-  createdAt DateTime @default(now()) @db.Timestamptz(6)
-  updatedAt DateTime @default(now()) @db.Timestamptz(6)
+  createdAt DateTime
+  updatedAt DateTime
 
   @@map("user")
 }

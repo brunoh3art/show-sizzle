@@ -1,10 +1,12 @@
 import { CreateMovie } from '@application/use-cases/movie/create-movie';
 import { FindManyMovie } from '@application/use-cases/movie/find-many-movie';
-import { Body, Controller, Delete, Get, Param, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
 
 import { DeleteMovie } from '@application/use-cases/movie/delete-movie';
 import { GetMovie } from '@application/use-cases/movie/get-movie';
+import { UpdateMovie } from '@application/use-cases/movie/update-movie';
 import { CreateVideo } from '@application/use-cases/video/create-video';
+import { GetVideo } from '@application/use-cases/video/get-video';
 import { MovieDTO } from '../dtos/movie';
 import { MovieViewModel } from '../view-models/movie-view-model';
 import { VideoViewModel } from '../view-models/video-view-model';
@@ -17,6 +19,8 @@ export class MoviesController {
     private readonly deleteMovie: DeleteMovie,
     private readonly getMovie: GetMovie,
     private readonly createVideo: CreateVideo,
+    private readonly getVideo: GetVideo,
+    private readonly updateMovie: UpdateMovie,
   ) {}
 
   @Get()
@@ -31,16 +35,25 @@ export class MoviesController {
 
   @Get(':id')
   async movie(@Param('id') movieId: string) {
-    const { content } = await this.getMovie.execute({
-      movieId,
-    });
+    const [{ content }, { video }] = await Promise.all<any>([
+      this.getMovie.execute({ movieId }),
+      this.getVideo.execute({ videoId: movieId }).catch((err) => {
+        console.log({ err });
+        return {
+          video: null,
+        };
+      }),
+    ]);
 
-    return { content: MovieViewModel.toHTTP(content) };
+    console.log('getVideo: ', video);
+
+    return { content: MovieViewModel.toHTTP(content), video: video && VideoViewModel.toHTTP(video) };
   }
 
   @Post()
   async create(@Body() body: MovieDTO) {
-    const { title, original_title, overview, poster_image, background_image, release_date, published, video } = body;
+    const { title, original_title, overview, poster_image, background_image, release_date, published, genres, video } =
+      body;
 
     const { content } = await this.createMovie.execute({
       title,
@@ -50,6 +63,7 @@ export class MoviesController {
       background_image,
       release_date,
       published,
+      genres,
     });
 
     const { video: media } = await this.createVideo.execute({
@@ -64,6 +78,31 @@ export class MoviesController {
       content: MovieViewModel.toHTTP(content),
       video: VideoViewModel.toHTTP(media),
     };
+  }
+
+  @Put(':id')
+  async update(@Param('id') id: string, @Body() body: MovieDTO) {
+    const { title, original_title, overview, poster_image, background_image, release_date, published, genres, video } =
+      body;
+
+    const { content } = await this.updateMovie.execute({
+      id,
+      title,
+      original_title,
+      overview,
+      poster_image,
+      background_image,
+      release_date,
+      published,
+      genres,
+      video: {
+        type: 'movie',
+        title: video.title,
+        format: video.format,
+        link: video.link,
+      },
+    });
+    return { content };
   }
 
   @Delete(':id')

@@ -10,7 +10,11 @@ export class GenresController {
 
   @Get()
   async getGenres(@Query() { skip = 0, take = 24, genre = '' }) {
-    const { total, page, content } = await this.findManyGenre.execute({ skip, take, genre });
+    const { total, page, content } = await this.findManyGenre.execute({
+      skip: Number(skip),
+      take: Number(take),
+      genre,
+    });
 
     return { total, page, content: content.map(GenreViewModel.toHTTP) };
   }

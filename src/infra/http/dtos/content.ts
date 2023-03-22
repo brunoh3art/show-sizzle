@@ -14,4 +14,5 @@ export class ContentDTO {
   background_image?: string;
   @IsBoolean()
   published: boolean;
+  genres?: string[];
 }

@@ -14,7 +14,11 @@ export class PrismaVideoRepository implements VideoRepository {
     const video = await this.prisma.media.findUnique({
       where: { id: videoId },
       include: {
-        movie: true,
+        movie: {
+          include: {
+            genres: true,
+          },
+        },
         episode: {
           include: {
             season: {

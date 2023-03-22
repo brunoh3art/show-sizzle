@@ -20,6 +20,7 @@ import { FindManyEpisode } from '@application/use-cases/episode/find-many-episod
 import { GetEpisode } from '@application/use-cases/episode/get-episode';
 import { CreateGenre } from '@application/use-cases/genre/create-genre';
 import { FindManyGenre } from '@application/use-cases/genre/find-many-genre';
+import { UpdateMovie } from '@application/use-cases/movie/update-movie';
 import { CreateSeason } from '@application/use-cases/season/create-season';
 import { DeleteSeason } from '@application/use-cases/season/delete-season';
 import { FindManySeason } from '@application/use-cases/season/find-many-season';
@@ -59,6 +60,7 @@ import { JwtStrategy } from './guards/jwt-strategy-guard';
     FindManyMovie,
     DeleteMovie,
     GetMovie,
+    UpdateMovie,
     // use case Controller & TvShow
     CreateTvShow,
     FindManyTvShow,

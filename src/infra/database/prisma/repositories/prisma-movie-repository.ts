@@ -1,7 +1,9 @@
 import { Content } from '@application/entities/content';
+import { Video } from '@application/entities/video';
 import { MovieRepository, MovieResponse } from '@application/repositories/movie-repository';
 import { Injectable } from '@nestjs/common';
 import { PrismaContentMapper } from '../mappers/prisma-content-mapper';
+import { PrismaVideoMapper } from '../mappers/prisma-video-mapper';
 import { PrismaService } from '../prisma.service';
 
 @Injectable()
@@ -9,7 +11,12 @@ export class PrismaMovieRepository implements MovieRepository {
   constructor(private prisma: PrismaService) {}
 
   async findById(content: string): Promise<Content | null> {
-    const movie = await this.prisma.movie.findUnique({ where: { id: content } });
+    const movie = await this.prisma.movie.findUnique({
+      where: { id: content },
+      include: {
+        genres: true,
+      },
+    });
     if (!movie) return null;
 
     return PrismaContentMapper.toDomain(movie);
@@ -20,6 +27,12 @@ export class PrismaMovieRepository implements MovieRepository {
       this.prisma.movie.findMany({
         skip,
         take,
+        include: {
+          genres: true,
+        },
+        orderBy: {
+          updatedAt: 'desc',
+        },
       }),
 
       this.prisma.movie.count({
@@ -30,7 +43,7 @@ export class PrismaMovieRepository implements MovieRepository {
 
     return {
       total: count,
-      content: items.map((item) => PrismaContentMapper.toDomain(item)),
+      content: items.map(PrismaContentMapper.toDomain),
     };
   }
 
@@ -39,12 +52,39 @@ export class PrismaMovieRepository implements MovieRepository {
     await this.prisma.movie.create({
       data: {
         ...raw,
+        genres: {
+          connect: content.genres.map((genres) => {
+            return {
+              id: genres.id,
+            };
+          }),
+        },
       },
     });
   }
-  async save(movieId: string, content: Content): Promise<void> {
+  async save(movieId: string, content: Content, media: Video): Promise<void> {
     const raw = PrismaContentMapper.toPrisma(content);
-    await this.prisma.movie.update({ where: { id: movieId }, data: raw });
+    const raw_video = PrismaVideoMapper.toPrisma(media);
+
+    const raw_genres = content.genres.map((genres) => {
+      return {
+        id: genres.id,
+      };
+    });
+
+    await this.prisma.movie.update({
+      where: { id: movieId },
+      data: {
+        ...raw,
+        genres: { set: raw_genres },
+        video: {
+          upsert: {
+            update: raw_video,
+            create: raw_video,
+          },
+        },
+      },
+    });
   }
   async remove(movieId: string): Promise<void> {
     await this.prisma.movie.delete({ where: { id: movieId } });

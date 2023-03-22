@@ -1,5 +1,6 @@
 import { randomUUID } from 'crypto';
 import { Replace } from 'src/helpers/replace';
+import { Genre } from './genre';
 
 export interface ContentProps {
   title: Title;
@@ -9,6 +10,7 @@ export interface ContentProps {
   poster_image?: string;
   background_image?: string;
   published: boolean;
+  genres?: Genre[];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -77,6 +79,13 @@ export class Content {
   }
   public get published(): boolean {
     return this.props.published;
+  }
+
+  public set genres(genres: Genre[]) {
+    this.props.genres = genres;
+  }
+  public get genres(): Genre[] {
+    return this.props.genres;
   }
 
   public get createdAt(): Date {
