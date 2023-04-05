@@ -1,4 +1,5 @@
 import { Content } from '@application/entities/content';
+import { GenreViewModel } from './genre-view-model';
 
 export class TvShowViewModel {
   static toHTTP(content: Content) {
@@ -11,6 +12,9 @@ export class TvShowViewModel {
       background_image: content.background_image,
       release_date: content.release_date,
       published: content.published,
+      genres: (content.genres && content?.genres.map(GenreViewModel.toHTTP)) || [],
+      createdAt: content.createdAt,
+      updatedAt: content.updatedAt,
     };
   }
 }

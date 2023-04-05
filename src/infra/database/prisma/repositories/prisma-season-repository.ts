@@ -11,6 +11,8 @@ export class PrismaSeasonRepository implements SeasonRepository {
   async findById(seasonId: string): Promise<Season | null> {
     const season = await this.prisma.season.findUnique({ where: { id: seasonId } });
 
+    console.log({ mySeason: season });
+
     if (!season) return null;
 
     return PrismaSeasonMapper.toDomain(season);
@@ -22,6 +24,9 @@ export class PrismaSeasonRepository implements SeasonRepository {
         skip,
         take,
         where: { tvshow: { id: tvShowId } },
+        orderBy: {
+          season_number: 'desc',
+        },
       }),
       this.prisma.season.count({ where: { tvshow: { id: tvShowId } }, skip: undefined, take: undefined }),
     ]);

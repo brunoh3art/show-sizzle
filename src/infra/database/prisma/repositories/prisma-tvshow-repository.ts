@@ -10,21 +10,15 @@ export class PrismaTvShowRepository implements TvShowRepository {
   constructor(private prisma: PrismaService) {}
 
   async findById(content: string): Promise<Content | null> {
-    const tvShow = await this.prisma.tvShow.findUnique({ where: { id: content } });
+    const tvShow = await this.prisma.tvShow.findUnique({
+      where: { id: content },
+      include: {
+        genres: true,
+      },
+    });
     if (!tvShow) return null;
 
-    return PrismaTvShowMapper.toDomain({
-      id: tvShow.id,
-      title: tvShow.title,
-      original_title: tvShow.original_title,
-      overview: tvShow.overview,
-      release_date: tvShow.release_date,
-      poster_image: tvShow.poster_image,
-      background_image: tvShow.background_image,
-      published: tvShow.published,
-      createdAt: tvShow.createdAt,
-      updatedAt: tvShow.updatedAt,
-    });
+    return PrismaTvShowMapper.toDomain(tvShow);
   }
 
   async findMany(skip: number, take: number): Promise<TvShowResponse> {
@@ -54,7 +48,13 @@ export class PrismaTvShowRepository implements TvShowRepository {
   }
   async save(tvShowId: string, content: Content): Promise<void> {
     const raw = PrismaContentMapper.toPrisma(content);
-    await this.prisma.tvShow.update({ where: { id: tvShowId }, data: raw });
+    const raw_genres = content.genres.map((genres) => {
+      return {
+        id: genres.id,
+      };
+    });
+
+    await this.prisma.tvShow.update({ where: { id: tvShowId }, data: { ...raw, genres: { set: raw_genres } } });
   }
   async remove(tvShowId: string): Promise<void> {
     await this.prisma.tvShow.delete({ where: { id: tvShowId } });

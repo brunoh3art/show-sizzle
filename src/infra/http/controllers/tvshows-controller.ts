@@ -1,9 +1,10 @@
-import { Body, Controller, Delete, Get, Param, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
 
 import { CreateTvShow } from '@application/use-cases/tvshow/create-tvshow';
 import { DeleteTvShow } from '@application/use-cases/tvshow/delete-tvshow';
 import { FindManyTvShow } from '@application/use-cases/tvshow/find-many-tvshow';
 import { GetTvShow } from '@application/use-cases/tvshow/get-tvshow';
+import { UpdateTvShow } from '@application/use-cases/tvshow/update-tvshow';
 import { ContentDTO } from '../dtos/content';
 import { TvShowViewModel } from '../view-models/tvshow-view-model';
 
@@ -14,6 +15,7 @@ export class TvShowsController {
     private readonly findManyTvShow: FindManyTvShow,
     private readonly deleteTvShow: DeleteTvShow,
     private readonly getTvShow: GetTvShow,
+    private readonly setTvShow: UpdateTvShow,
   ) {}
 
   @Get()
@@ -37,7 +39,7 @@ export class TvShowsController {
 
   @Post()
   async create(@Body() body: ContentDTO) {
-    const { title, original_title, overview, poster_image, background_image, release_date, published } = body;
+    const { title, original_title, overview, poster_image, background_image, release_date, published, genres } = body;
 
     const { content } = await this.createTvShow.execute({
       title,
@@ -47,6 +49,27 @@ export class TvShowsController {
       background_image,
       release_date,
       published,
+    });
+
+    return {
+      content: TvShowViewModel.toHTTP(content),
+    };
+  }
+
+  @Put(':id')
+  async update(@Param('id') id: string, @Body() body: ContentDTO) {
+    const { title, original_title, overview, poster_image, background_image, release_date, published, genres } = body;
+
+    const { content } = await this.setTvShow.execute({
+      id,
+      title,
+      original_title,
+      overview,
+      poster_image,
+      background_image,
+      release_date,
+      published,
+      genres,
     });
 
     return {

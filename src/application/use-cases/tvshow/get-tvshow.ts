@@ -18,6 +18,8 @@ export class GetTvShow {
 
     const content = await this.contentRepository.findById(tvshowId);
 
+    console.log({ content });
+
     return {
       content: content,
     };

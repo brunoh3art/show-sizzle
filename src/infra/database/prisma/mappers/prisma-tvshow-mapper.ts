@@ -1,5 +1,7 @@
 import { Content, Title } from '@application/entities/content';
-import { TvShow } from '@prisma/client';
+import { Genre } from '@application/entities/genre';
+import { Replace } from '@helpers/replace';
+import { Genre as PrismaGenre, TvShow } from '@prisma/client';
 
 export class PrismaTvShowMapper {
   static toPrisma(content: Content) {
@@ -12,12 +14,13 @@ export class PrismaTvShowMapper {
       poster_image: content.poster_image,
       background_image: content.background_image,
       published: content.published,
+
       createdAt: content.createdAt,
       updatedAt: content.updatedAt,
     };
   }
 
-  static toDomain(content: TvShow): Content {
+  static toDomain(content: Replace<TvShow, { genres?: PrismaGenre[] }>): Content {
     return new Content(
       {
         title: new Title(content.title),
@@ -27,6 +30,17 @@ export class PrismaTvShowMapper {
         poster_image: content.poster_image,
         background_image: content.background_image,
         published: content.published,
+        genres: content.genres?.map(
+          (genre) =>
+            new Genre(
+              {
+                title: genre.title,
+                createdAt: genre.createdAt,
+                updatedAt: genre.updatedAt,
+              },
+              genre.id,
+            ),
+        ),
         createdAt: content.createdAt,
         updatedAt: content.updatedAt,
       },

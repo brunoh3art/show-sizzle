@@ -25,6 +25,7 @@ import { CreateSeason } from '@application/use-cases/season/create-season';
 import { DeleteSeason } from '@application/use-cases/season/delete-season';
 import { FindManySeason } from '@application/use-cases/season/find-many-season';
 import { GetSeason } from '@application/use-cases/season/get-season';
+import { UpdateTvShow } from '@application/use-cases/tvshow/update-tvshow';
 import { GetUserById } from '@application/use-cases/user/get-user-by-id';
 import { UserLogin } from '@application/use-cases/user/user-login';
 import { UserRegister } from '@application/use-cases/user/user-register';
@@ -40,6 +41,7 @@ import { MoviesController } from './controllers/movies.controller';
 import { SeasonsController } from './controllers/seasons.controller';
 import { TvShowsController } from './controllers/tvshows-controller';
 import { JwtStrategy } from './guards/jwt-strategy-guard';
+import { UpdateSeason } from '@application/use-cases/season/update-season';
 
 @Module({
   imports: [DatabaseModule, PassportModule.register({ defaultStrategy: 'jwt' })],
@@ -66,11 +68,13 @@ import { JwtStrategy } from './guards/jwt-strategy-guard';
     FindManyTvShow,
     DeleteTvShow,
     GetTvShow,
+    UpdateTvShow,
     // use case Season & Controller
     FindManySeason,
     GetSeason,
     CreateSeason,
     DeleteSeason,
+    UpdateSeason,
     // use case Episode & Controller
     GetEpisode,
     FindManyEpisode,

@@ -1,11 +1,11 @@
-import { IsBoolean, IsNotEmpty, IsString, Length } from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsNumber, IsString, Length } from 'class-validator';
 
 export class SeasonDTOS {
   @IsNotEmpty()
   @Length(3, 240)
   title: string;
   @IsNotEmpty()
-  @Length(0)
+  @IsNumber()
   season_number: number;
   @IsString()
   season_overview?: string;
