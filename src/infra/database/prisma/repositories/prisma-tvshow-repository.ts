@@ -1,5 +1,5 @@
 import { Content } from '@application/entities/content';
-import { TvShowRepository, TvShowResponse } from '@application/repositories/tvshow-repository';
+import { FindManyTvShowRequest, TvShowRepository, TvShowResponse } from '@application/repositories/tvshow-repository';
 import { Injectable } from '@nestjs/common';
 import { PrismaContentMapper } from '../mappers/prisma-content-mapper';
 import { PrismaTvShowMapper } from '../mappers/prisma-tvshow-mapper';
@@ -21,16 +21,21 @@ export class PrismaTvShowRepository implements TvShowRepository {
     return PrismaTvShowMapper.toDomain(tvShow);
   }
 
-  async findMany(skip: number, take: number): Promise<TvShowResponse> {
+  async findMany({ skip, take, filters }: FindManyTvShowRequest): Promise<TvShowResponse> {
     const [items, count] = await this.prisma.$transaction([
       this.prisma.tvShow.findMany({
         skip,
         take,
+        where: filters && { published: filters.published || undefined },
+        orderBy: {
+          updatedAt: 'desc',
+        },
       }),
 
       this.prisma.tvShow.count({
         take: undefined,
         skip: undefined,
+        where: filters && { published: filters.published || undefined },
       }),
     ]);
 

@@ -17,9 +17,20 @@ export class TvShowsController {
     private readonly getTvShow: GetTvShow,
     private readonly setTvShow: UpdateTvShow,
   ) {}
-
+  //public content
   @Get()
   async tvshows(@Query() { skip = 0, take = 24 }) {
+    const { content, total, page } = await this.findManyTvShow.execute({
+      skip: Number(skip),
+      take: Number(take),
+      filters: { published: true },
+    });
+
+    return { content: content.map((item) => TvShowViewModel.toHTTP(item)), total, page };
+  }
+  //public content
+  @Get('admin')
+  async privateTvShows(@Query() { skip = 0, take = 24 }) {
     const { content, total, page } = await this.findManyTvShow.execute({
       skip: Number(skip),
       take: Number(take),

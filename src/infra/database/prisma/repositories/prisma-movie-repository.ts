@@ -1,6 +1,6 @@
 import { Content } from '@application/entities/content';
 import { Video } from '@application/entities/video';
-import { MovieRepository, MovieResponse } from '@application/repositories/movie-repository';
+import { FindManyMovieRequest, MovieRepository, MovieResponse } from '@application/repositories/movie-repository';
 import { Injectable } from '@nestjs/common';
 import { PrismaContentMapper } from '../mappers/prisma-content-mapper';
 import { PrismaVideoMapper } from '../mappers/prisma-video-mapper';
@@ -22,7 +22,7 @@ export class PrismaMovieRepository implements MovieRepository {
     return PrismaContentMapper.toDomain(movie);
   }
 
-  async findMany(skip: number, take: number): Promise<MovieResponse> {
+  async findMany({ skip, take, filters }: FindManyMovieRequest): Promise<MovieResponse> {
     const [items, count] = await this.prisma.$transaction([
       this.prisma.movie.findMany({
         skip,
@@ -33,11 +33,13 @@ export class PrismaMovieRepository implements MovieRepository {
         orderBy: {
           updatedAt: 'desc',
         },
+        where: filters && { published: filters.published || undefined },
       }),
 
       this.prisma.movie.count({
         take: undefined,
         skip: undefined,
+        where: filters && { published: filters.published || undefined },
       }),
     ]);
 

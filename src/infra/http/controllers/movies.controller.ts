@@ -1,16 +1,13 @@
 import { CreateMovie } from '@application/use-cases/movie/create-movie';
 import { FindManyMovie } from '@application/use-cases/movie/find-many-movie';
-import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
 
-import { Role } from '@application/enums/role.enum';
 import { DeleteMovie } from '@application/use-cases/movie/delete-movie';
 import { GetMovie } from '@application/use-cases/movie/get-movie';
 import { UpdateMovie } from '@application/use-cases/movie/update-movie';
 import { CreateVideo } from '@application/use-cases/video/create-video';
 import { GetVideo } from '@application/use-cases/video/get-video';
-import { Roles } from '@infra/decorators/roles.decorator';
 import { MovieDTO } from '../dtos/movie';
-import { JwtAuthGuard } from '../guards/jwt-auth-guard';
 import { MovieViewModel } from '../view-models/movie-view-model';
 import { VideoViewModel } from '../view-models/video-view-model';
 
@@ -25,11 +22,20 @@ export class MoviesController {
     private readonly getVideo: GetVideo,
     private readonly updateMovie: UpdateMovie,
   ) {}
-
-  @Roles(Role.ADMIN)
-  @UseGuards(JwtAuthGuard)
+  //public getMovies
   @Get()
   async movies(@Query() { skip = 0, take = 24 }) {
+    const { content, total, page } = await this.findManyMovie.execute({
+      skip: Number(skip),
+      take: Number(take),
+      filters: { published: true },
+    });
+
+    return { content: content.map((item) => MovieViewModel.toHTTP(item)), total, page };
+  }
+  //private getMovies
+  @Get('admin')
+  async privateMovies(@Query() { skip = 0, take = 24 }) {
     const { content, total, page } = await this.findManyMovie.execute({
       skip: Number(skip),
       take: Number(take),

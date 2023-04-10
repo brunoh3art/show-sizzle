@@ -1,11 +1,6 @@
-import { MovieRepository } from '@application/repositories/movie-repository';
+import { FindManyMovieRequest, MovieRepository } from '@application/repositories/movie-repository';
 import { Injectable } from '@nestjs/common';
 import { Content } from '../../entities/content';
-
-interface FindManyMovieRequest {
-  skip?: number;
-  take: number;
-}
 
 interface FindManyMovieResponse {
   page: number;
@@ -17,9 +12,9 @@ export class FindManyMovie {
   constructor(private contentRepository: MovieRepository) {}
 
   async execute(request: FindManyMovieRequest): Promise<FindManyMovieResponse> {
-    const { skip, take } = request;
+    const { skip, take, filters } = request;
 
-    const { content, total } = await this.contentRepository.findMany(skip, take);
+    const { content, total } = await this.contentRepository.findMany({ skip, take, filters });
 
     return {
       content: content,
