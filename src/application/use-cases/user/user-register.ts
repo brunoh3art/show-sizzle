@@ -26,19 +26,19 @@ export class UserRegister {
 
     const hashPassword = await argon2.hash(password);
 
-    const content = new User({
+    const saveUser = new User({
       name: name,
       email: email,
       password: hashPassword,
       role: 'USER',
     });
 
-    await this.userRepository.create(content);
+    await this.userRepository.create(saveUser);
 
-    const token = await Jwt.createAuthToken({ id: user.id });
+    const token = await Jwt.createAuthToken({ id: saveUser.id });
 
     return {
-      user: content,
+      user: saveUser,
       token: token,
     };
   }

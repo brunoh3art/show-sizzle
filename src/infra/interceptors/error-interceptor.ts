@@ -11,7 +11,7 @@ export class ErrorInterceptor implements ExceptionFilter {
     const status = error.status || error.statusCode || 500;
     const message = error.message || 'Internal server error';
 
-    response.status(status).json({
+    response.status(status).send({
       statusCode: status,
       message: message,
       timestamp: new Date().toISOString(),

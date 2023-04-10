@@ -37,6 +37,8 @@ export class AuthController {
   async register(@Body() data: RegisterDTO) {
     const { name, email, password } = data;
 
+    console.log(`register: `, { name, email, password });
+
     const { user, token } = await this.userRegister.execute({ name, email, password });
 
     return { user: UserViewModel.toHTTP(user), token };
