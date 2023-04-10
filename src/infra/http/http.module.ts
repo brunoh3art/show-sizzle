@@ -18,6 +18,7 @@ import { CreateEpisode } from '@application/use-cases/episode/create-episode';
 import { DeleteEpisode } from '@application/use-cases/episode/delete-episode';
 import { FindManyEpisode } from '@application/use-cases/episode/find-many-episode';
 import { GetEpisode } from '@application/use-cases/episode/get-episode';
+import { UpdateEpisode } from '@application/use-cases/episode/update-episode';
 import { CreateGenre } from '@application/use-cases/genre/create-genre';
 import { FindManyGenre } from '@application/use-cases/genre/find-many-genre';
 import { UpdateMovie } from '@application/use-cases/movie/update-movie';
@@ -25,12 +26,14 @@ import { CreateSeason } from '@application/use-cases/season/create-season';
 import { DeleteSeason } from '@application/use-cases/season/delete-season';
 import { FindManySeason } from '@application/use-cases/season/find-many-season';
 import { GetSeason } from '@application/use-cases/season/get-season';
+import { UpdateSeason } from '@application/use-cases/season/update-season';
 import { UpdateTvShow } from '@application/use-cases/tvshow/update-tvshow';
 import { GetUserById } from '@application/use-cases/user/get-user-by-id';
 import { UserLogin } from '@application/use-cases/user/user-login';
 import { UserRegister } from '@application/use-cases/user/user-register';
 import { CreateVideo } from '@application/use-cases/video/create-video';
 import { GetVideo } from '@application/use-cases/video/get-video';
+import { UpdateVideo } from '@application/use-cases/video/update-video';
 import { PassportModule } from '@nestjs/passport';
 import { AppController } from './controllers/app.controller';
 import { AuthController } from './controllers/auth.controller';
@@ -41,7 +44,6 @@ import { MoviesController } from './controllers/movies.controller';
 import { SeasonsController } from './controllers/seasons.controller';
 import { TvShowsController } from './controllers/tvshows-controller';
 import { JwtStrategy } from './guards/jwt-strategy-guard';
-import { UpdateSeason } from '@application/use-cases/season/update-season';
 
 @Module({
   imports: [DatabaseModule, PassportModule.register({ defaultStrategy: 'jwt' })],
@@ -80,9 +82,11 @@ import { UpdateSeason } from '@application/use-cases/season/update-season';
     FindManyEpisode,
     CreateEpisode,
     DeleteEpisode,
+    UpdateEpisode,
     // use case video
     CreateVideo,
     GetVideo,
+    UpdateVideo,
     // use case User
     UserLogin,
     UserRegister,

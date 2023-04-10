@@ -104,7 +104,7 @@ export class Title {
   }
 
   private validateTitleLength(value: string): boolean {
-    return value.length >= 3 && value.length <= 240;
+    return value.length >= 1 && value.length <= 240;
   }
 
   constructor(value: string) {

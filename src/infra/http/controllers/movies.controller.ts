@@ -45,8 +45,6 @@ export class MoviesController {
       }),
     ]);
 
-    console.log('getVideo: ', video);
-
     return { content: MovieViewModel.toHTTP(content), video: video && VideoViewModel.toHTTP(video) };
   }
 

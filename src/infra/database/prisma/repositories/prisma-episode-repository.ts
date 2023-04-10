@@ -7,7 +7,7 @@ import { PrismaService } from '../prisma.service';
 export class PrismaEpisodeRepository implements EpisodeRepository {
   constructor(private prisma: PrismaService) {}
   async findById(episodeId: string): Promise<Episode | null> {
-    const episode = await this.prisma.episode.findUnique({ where: { id: episodeId } });
+    const episode = await this.prisma.episode.findUnique({ where: { id: episodeId }, include: { season: true } });
     if (!episode) return null;
 
     return PrismaEpisodeMapper.toDomain(episode);
@@ -19,6 +19,9 @@ export class PrismaEpisodeRepository implements EpisodeRepository {
         take: take,
         include: { season: true },
         where: { seasonId: seasonId },
+        orderBy: {
+          episode_number: 'desc',
+        },
       }),
       this.prisma.episode.count({ where: { seasonId: seasonId }, skip: undefined, take: undefined }),
     ]);

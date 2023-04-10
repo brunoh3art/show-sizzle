@@ -40,7 +40,7 @@ export class CreateMovie {
       poster_image,
       background_image,
       published,
-      genres: genres.map((genre) => new Genre({ title: 'genre' }, genre)),
+      genres: (!!genres && genres.length > 0 && genres?.map((genre) => new Genre({ title: 'genre' }, genre))) || [],
     });
 
     await this.contentRepository.create(content);

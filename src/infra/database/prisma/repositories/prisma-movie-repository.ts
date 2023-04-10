@@ -64,7 +64,7 @@ export class PrismaMovieRepository implements MovieRepository {
   }
   async save(movieId: string, content: Content, media: Video): Promise<void> {
     const raw = PrismaContentMapper.toPrisma(content);
-    const raw_video = PrismaVideoMapper.toPrisma(media);
+    const { createdAt, ...raw_video } = PrismaVideoMapper.toPrisma(media);
 
     const raw_genres = content.genres.map((genres) => {
       return {
@@ -80,7 +80,7 @@ export class PrismaMovieRepository implements MovieRepository {
         video: {
           upsert: {
             update: raw_video,
-            create: raw_video,
+            create: { createdAt, ...raw_video },
           },
         },
       },

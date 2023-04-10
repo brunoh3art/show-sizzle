@@ -32,7 +32,7 @@ export class PrismaContentMapper {
         poster_image: content.poster_image,
         background_image: content.background_image,
         published: content.published,
-        genres: content.genres.map(
+        genres: content.genres?.map(
           (genre) =>
             new Genre(
               {

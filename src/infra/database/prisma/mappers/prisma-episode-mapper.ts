@@ -20,16 +20,19 @@ export class PrismaEpisodeMapper {
   }
 
   static toDomain(episode: Replace<PrismaEpisode, { season?: PrismaSeason }>) {
-    return new Episode({
-      title: new EpisodeTitle(episode.title),
-      episode_number: new EpisodeNumber(episode.episode_number),
-      overview: episode.overview,
-      background_image: episode.background_image,
-      release_date: episode.release_date,
-      isPublished: episode.isPublished,
-      createdAt: episode.createdAt,
-      updatedAt: episode.updatedAt,
-      season: PrismaSeasonMapper.toDomain(episode.season),
-    });
+    return new Episode(
+      {
+        title: new EpisodeTitle(episode.title),
+        episode_number: new EpisodeNumber(episode.episode_number),
+        overview: episode.overview,
+        background_image: episode.background_image,
+        release_date: episode.release_date,
+        isPublished: episode.isPublished,
+        createdAt: episode.createdAt,
+        updatedAt: episode.updatedAt,
+        season: PrismaSeasonMapper.toDomain(episode.season),
+      },
+      episode.id,
+    );
   }
 }

@@ -5,7 +5,7 @@ export class ContentDTO {
   @Length(3, 240)
   title: string;
   @IsNotEmpty()
-  @Length(3, 240)
+  @Length(1, 240)
   original_title: string;
   overview?: string;
   @IsNotEmpty()

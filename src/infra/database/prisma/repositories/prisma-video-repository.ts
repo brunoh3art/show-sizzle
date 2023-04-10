@@ -31,8 +31,6 @@ export class PrismaVideoRepository implements VideoRepository {
       },
     });
 
-    console.log({ video });
-
     if (!video) return null;
 
     return {
@@ -82,10 +80,21 @@ export class PrismaVideoRepository implements VideoRepository {
   }
 
   async save({ videoId, content }: { videoId: string; content: Video }): Promise<void> {
-    const raw = PrismaVideoMapper.toPrisma(content);
-    await this.prisma.media.updateMany({
+    const { createdAt, ...raw } = PrismaVideoMapper.toPrisma(content);
+    const connectToRelationship =
+      raw.type == 'movie' ? { movie: { connect: { id: raw.id } } } : { episode: { connect: { id: raw.id } } };
+
+    await this.prisma.media.upsert({
       where: { id: videoId },
-      data: raw,
+      create: {
+        ...raw,
+        createdAt,
+        ...connectToRelationship,
+      },
+      update: {
+        ...raw,
+        ...connectToRelationship,
+      },
     });
   }
 

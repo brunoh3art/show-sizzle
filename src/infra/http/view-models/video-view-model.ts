@@ -1,6 +1,7 @@
 import { Content } from '@application/entities/content';
 import { Episode } from '@application/entities/episode';
 import { Video } from '@application/entities/video';
+
 import { EpisodeViewModel } from './episode-view-model';
 import { MovieViewModel } from './movie-view-model';
 

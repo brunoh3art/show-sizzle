@@ -2,10 +2,10 @@ import { CreateSeason } from '@application/use-cases/season/create-season';
 import { DeleteSeason } from '@application/use-cases/season/delete-season';
 import { FindManySeason } from '@application/use-cases/season/find-many-season';
 import { GetSeason } from '@application/use-cases/season/get-season';
-import { Body, Controller, Delete, Get, Param, Post, Query, Put } from '@nestjs/common';
+import { UpdateSeason } from '@application/use-cases/season/update-season';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { SeasonDTOS } from '../dtos/season';
 import { SeasonViewModel } from '../view-models/season-view-model';
-import { UpdateSeason } from '@application/use-cases/season/update-season';
 
 @Controller('seasons')
 export class SeasonsController {
