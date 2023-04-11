@@ -10,7 +10,7 @@ export class PrismaTvShowRepository implements TvShowRepository {
   constructor(private prisma: PrismaService) {}
 
   async findById(content: string): Promise<Content | null> {
-    const tvShow = await this.prisma.tvShow.findUnique({
+    const tvShow = await this.prisma.post.findUnique({
       where: { id: content },
       include: {
         genres: true,
@@ -23,19 +23,25 @@ export class PrismaTvShowRepository implements TvShowRepository {
 
   async findMany({ skip, take, filters }: FindManyTvShowRequest): Promise<TvShowResponse> {
     const [items, count] = await this.prisma.$transaction([
-      this.prisma.tvShow.findMany({
+      this.prisma.post.findMany({
         skip,
         take,
-        where: filters && { published: filters.published || undefined },
+        where: {
+          type: 'serie',
+          ...(filters && { published: filters.published || undefined }),
+        },
         orderBy: {
           updatedAt: 'desc',
         },
       }),
 
-      this.prisma.tvShow.count({
+      this.prisma.post.count({
         take: undefined,
         skip: undefined,
-        where: filters && { published: filters.published || undefined },
+        where: {
+          type: 'serie',
+          ...(filters && { published: filters.published || undefined }),
+        },
       }),
     ]);
 
@@ -47,8 +53,11 @@ export class PrismaTvShowRepository implements TvShowRepository {
 
   async create(content: Content): Promise<void> {
     const raw = PrismaContentMapper.toPrisma(content);
-    await this.prisma.tvShow.create({
-      data: raw,
+    await this.prisma.post.create({
+      data: {
+        ...raw,
+        type: 'serie',
+      },
     });
   }
   async save(tvShowId: string, content: Content): Promise<void> {
@@ -59,9 +68,9 @@ export class PrismaTvShowRepository implements TvShowRepository {
       };
     });
 
-    await this.prisma.tvShow.update({ where: { id: tvShowId }, data: { ...raw, genres: { set: raw_genres } } });
+    await this.prisma.post.update({ where: { id: tvShowId }, data: { ...raw, genres: { set: raw_genres } } });
   }
   async remove(tvShowId: string): Promise<void> {
-    await this.prisma.tvShow.delete({ where: { id: tvShowId } });
+    await this.prisma.post.delete({ where: { id: tvShowId } });
   }
 }

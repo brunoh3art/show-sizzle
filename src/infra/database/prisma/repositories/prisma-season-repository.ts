@@ -23,12 +23,12 @@ export class PrismaSeasonRepository implements SeasonRepository {
       this.prisma.season.findMany({
         skip,
         take,
-        where: { tvshow: { id: tvShowId } },
+        where: { content: { id: tvShowId } },
         orderBy: {
           season_number: 'desc',
         },
       }),
-      this.prisma.season.count({ where: { tvshow: { id: tvShowId } }, skip: undefined, take: undefined }),
+      this.prisma.season.count({ where: { content: { id: tvShowId } }, skip: undefined, take: undefined }),
     ]);
     return {
       seasons: seasons.map((season) => PrismaSeasonMapper.toDomain(season)),
@@ -42,7 +42,7 @@ export class PrismaSeasonRepository implements SeasonRepository {
     await this.prisma.season.create({
       data: {
         ...raw,
-        tvshow: { connect: { id: tvShowId } },
+        content: { connect: { id: tvShowId } },
       },
     });
   }

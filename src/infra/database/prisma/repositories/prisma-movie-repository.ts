@@ -11,7 +11,7 @@ export class PrismaMovieRepository implements MovieRepository {
   constructor(private prisma: PrismaService) {}
 
   async findById(content: string): Promise<Content | null> {
-    const movie = await this.prisma.movie.findUnique({
+    const movie = await this.prisma.post.findUnique({
       where: { id: content },
       include: {
         genres: true,
@@ -24,7 +24,7 @@ export class PrismaMovieRepository implements MovieRepository {
 
   async findMany({ skip, take, filters }: FindManyMovieRequest): Promise<MovieResponse> {
     const [items, count] = await this.prisma.$transaction([
-      this.prisma.movie.findMany({
+      this.prisma.post.findMany({
         skip,
         take,
         include: {
@@ -33,13 +33,19 @@ export class PrismaMovieRepository implements MovieRepository {
         orderBy: {
           updatedAt: 'desc',
         },
-        where: filters && { published: filters.published || undefined },
+        where: {
+          type: 'movie',
+          ...(filters && { published: filters.published || undefined }),
+        },
       }),
 
-      this.prisma.movie.count({
+      this.prisma.post.count({
         take: undefined,
         skip: undefined,
-        where: filters && { published: filters.published || undefined },
+        where: {
+          type: 'movie',
+          ...(filters && { published: filters.published || undefined }),
+        },
       }),
     ]);
 
@@ -51,9 +57,10 @@ export class PrismaMovieRepository implements MovieRepository {
 
   async create(content: Content): Promise<void> {
     const raw = PrismaContentMapper.toPrisma(content);
-    await this.prisma.movie.create({
+    await this.prisma.post.create({
       data: {
         ...raw,
+        type: 'movie',
         genres: {
           connect: content.genres.map((genres) => {
             return {
@@ -74,7 +81,7 @@ export class PrismaMovieRepository implements MovieRepository {
       };
     });
 
-    await this.prisma.movie.update({
+    await this.prisma.post.update({
       where: { id: movieId },
       data: {
         ...raw,
@@ -89,6 +96,9 @@ export class PrismaMovieRepository implements MovieRepository {
     });
   }
   async remove(movieId: string): Promise<void> {
-    await this.prisma.movie.delete({ where: { id: movieId } });
+    await this.prisma.$transaction([
+      this.prisma.post.delete({ where: { id: movieId } }),
+      this.prisma.media.delete({ where: { id: movieId } }),
+    ]);
   }
 }

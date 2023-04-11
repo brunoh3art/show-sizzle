@@ -8,7 +8,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Movie {
+model Post {
   id               String   @id
   title            String
   original_title   String
@@ -20,47 +20,32 @@ model Movie {
   createdAt        DateTime
   updatedAt        DateTime
   videoId          String?
-
-  genres Genre[]
-  video  Media?  @relation(fields: [videoId], references: [id])
-
-  @@index([id, createdAt])
-  @@map("movie")
-}
-
-model TvShow {
-  id               String   @id
-  title            String
-  original_title   String
-  overview         String?
-  release_date     String
-  poster_image     String?
-  background_image String?
-  published        Boolean
-  createdAt        DateTime
-  updatedAt        DateTime
-  genres           Genre[]
+  type             String
+  //relationships
   seasons          Season[]
+  genres           Genre[]
+  video            Media?   @relation(fields: [videoId], references: [id])
 
-  @@index([id, createdAt])
-  @@map("tvshow")
+  @@index([id, title])
+  @@map("content")
 }
 
 model Season {
-  id              String    @id
+  id              String   @id
   title           String
   season_number   Int
   season_overview String?
   poster_image    String?
   release_date    String?
-  isPublished     Boolean   @default(false)
+  isPublished     Boolean  @default(false)
   createdAt       DateTime
   updatedAt       DateTime
-  tvshowId        String?
-  episodes        Episode[]
-  tvshow          TvShow?   @relation(fields: [tvshowId], references: [id])
 
-  @@index([id, createdAt])
+  episodes  Episode[]
+  content   Post?     @relation(fields: [contentId], references: [id])
+  contentId String?
+
+  @@index([id])
   @@map("season")
 }
 
@@ -89,8 +74,8 @@ model Genre {
   createdAt DateTime
   updatedAt DateTime
 
-  tvshow TvShow[]
-  movie  Movie[]
+  content   Post?   @relation(fields: [contentId], references: [id])
+  contentId String?
 
   @@index([id, createdAt])
   @@map("genre")
@@ -105,7 +90,7 @@ model Media {
   createdAt DateTime
   updatedAt DateTime
   episode   Episode[]
-  movie     Movie[]
+  content   Post[]
 
   @@index([id, createdAt])
   @@map("media")
@@ -118,12 +103,31 @@ model User {
   password String
   avatar   String?
 
-  role Role @default(USER)
-
-  createdAt DateTime
-  updatedAt DateTime
+  role       Role      @default(USER)
+  user_role  UserRole? @relation(fields: [userRoleId], references: [id])
+  createdAt  DateTime
+  updatedAt  DateTime
+  userRoleId String?
 
   @@map("user")
+}
+
+// prisma model user controller acess (RBAC)
+model UserRole {
+  id          String       @id
+  name        String       @unique
+  permissions Permission[]
+  user        User[]
+
+  @@map("role")
+}
+
+model Permission {
+  id    String     @id
+  name  String     @unique
+  roles UserRole[]
+
+  @@map("permission")
 }
 
 enum Role {

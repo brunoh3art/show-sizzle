@@ -1,7 +1,7 @@
 import { Content, Title } from '@application/entities/content';
 import { Genre } from '@application/entities/genre';
 import { Replace } from '@helpers/replace';
-import { Movie, Genre as PrismaGenre, TvShow } from '@prisma/client';
+import { Post, Genre as PrismaGenre } from '@prisma/client';
 
 export class PrismaContentMapper {
   static toPrisma(content: Content) {
@@ -21,7 +21,7 @@ export class PrismaContentMapper {
   }
 
   static toDomain(
-    content: Replace<Movie, { genres?: PrismaGenre[] }> | Replace<TvShow, { genres?: PrismaGenre[] }>,
+    content: Replace<Post, { genres?: PrismaGenre[] }> | Replace<Post, { genres?: PrismaGenre[] }>,
   ): Content {
     return new Content(
       {

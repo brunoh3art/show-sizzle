@@ -14,7 +14,7 @@ export class PrismaVideoRepository implements VideoRepository {
     const video = await this.prisma.media.findUnique({
       where: { id: videoId },
       include: {
-        movie: {
+        content: {
           include: {
             genres: true,
           },
@@ -23,7 +23,7 @@ export class PrismaVideoRepository implements VideoRepository {
           include: {
             season: {
               include: {
-                tvshow: true,
+                content: true,
               },
             },
           },
@@ -39,8 +39,8 @@ export class PrismaVideoRepository implements VideoRepository {
         episode: video.episode.length > 0 && PrismaEpisodeMapper.toDomain(video.episode[0]),
         content:
           video.type == 'movie'
-            ? PrismaContentMapper.toDomain(video.movie[0])
-            : PrismaContentMapper.toDomain(video.episode[0].season.tvshow),
+            ? PrismaContentMapper.toDomain(video.content[0])
+            : PrismaContentMapper.toDomain(video.episode[0].season.content),
       },
     };
   }
@@ -52,7 +52,7 @@ export class PrismaVideoRepository implements VideoRepository {
             id: findManyById,
           },
           {
-            movie: {
+            content: {
               every: { id: findManyById },
             },
           },
@@ -72,7 +72,7 @@ export class PrismaVideoRepository implements VideoRepository {
     const raw = PrismaVideoMapper.toPrisma(content);
 
     const connectToRelationship =
-      raw.type == 'movie' ? { movie: { connect: { id: raw.id } } } : { episode: { connect: { id: raw.id } } };
+      raw.type == 'movie' ? { content: { connect: { id: raw.id } } } : { episode: { connect: { id: raw.id } } };
 
     await this.prisma.media.create({
       data: { ...raw, ...connectToRelationship },

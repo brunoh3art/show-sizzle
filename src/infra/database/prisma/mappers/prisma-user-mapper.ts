@@ -1,4 +1,5 @@
 import { User } from '@application/entities/user';
+import { Replace } from '@helpers/replace';
 import { User as UserPrisma } from '@prisma/client';
 
 export class PrismaUserMapper {
@@ -14,7 +15,7 @@ export class PrismaUserMapper {
       updatedAt: user.updatedAt,
     };
   }
-  static toDomain(user: UserPrisma) {
+  static toDomain(user: Replace<UserPrisma, { userRoleId?: string }>) {
     return new User(
       {
         email: user.email,
