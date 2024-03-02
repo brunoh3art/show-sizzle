@@ -1,12 +1,13 @@
 import { Replace } from '@helpers/replace';
 import { randomUUID } from 'crypto';
+import { Role } from './role';
 
 export interface UserProps {
   name: string;
   email: string;
   password: string;
   avatar?: string;
-  role: 'USER' | 'ADMIN';
+  role: Role;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -56,10 +57,10 @@ export class User {
     return this.props.avatar;
   }
 
-  public set role(role: 'USER' | 'ADMIN') {
+  public set role(role: Role) {
     this.props.role = role;
   }
-  public get role(): 'USER' | 'ADMIN' {
+  public get role(): Role {
     return this.props.role;
   }
 

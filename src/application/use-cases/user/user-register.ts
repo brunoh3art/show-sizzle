@@ -1,5 +1,7 @@
 import { Jwt } from '@application/configs/jwt';
+import { Role } from '@application/entities/role';
 import { User } from '@application/entities/user';
+import { ControlAccessRepository } from '@application/repositories/control-access-repository';
 import { UserRepository } from '@application/repositories/user-repository';
 import { Injectable } from '@nestjs/common';
 import * as argon2 from 'argon2';
@@ -16,7 +18,7 @@ interface UserRegisterResponse {
 }
 @Injectable()
 export class UserRegister {
-  constructor(private userRepository: UserRepository) {}
+  constructor(private userRepository: UserRepository, private role: ControlAccessRepository) {}
 
   async execute(request: UserRegisterRequest): Promise<UserRegisterResponse> {
     const { name, email, password } = request;
@@ -25,12 +27,13 @@ export class UserRegister {
     if (user) throw new Error('User exists');
 
     const hashPassword = await argon2.hash(password);
+    const role = new Role({ name: 'USER' });
 
     const saveUser = new User({
       name: name,
       email: email,
       password: hashPassword,
-      role: 'USER',
+      role: role,
     });
 
     await this.userRepository.create(saveUser);

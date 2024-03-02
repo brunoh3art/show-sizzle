@@ -108,10 +108,10 @@ export class Title {
   }
 
   constructor(value: string) {
-    const isTitleLengthValid = this.validateTitleLength(value);
+    const isTitleLengthValid = this.validateTitleLength(value.trim());
 
     if (!isTitleLengthValid) throw new Error(`title length error.`);
 
-    this.title = value;
+    this.title = value.trim();
   }
 }

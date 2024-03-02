@@ -1,4 +1,5 @@
 import { User } from '@application/entities/user';
+import { ControlAccessModel } from './control-access-model';
 
 export class UserViewModel {
   static toHTTP(user: User) {
@@ -7,7 +8,7 @@ export class UserViewModel {
       name: user.name,
       email: user.email,
       avatar: user.avatar,
-      role: user.role,
+      role: ControlAccessModel.toRoleHTTP(user.role),
     };
   }
 }

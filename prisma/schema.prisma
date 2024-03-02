@@ -103,34 +103,34 @@ model User {
   password String
   avatar   String?
 
-  role       Role      @default(USER)
-  user_role  UserRole? @relation(fields: [userRoleId], references: [id])
-  createdAt  DateTime
-  updatedAt  DateTime
-  userRoleId String?
+  role Role? @relation(fields: [roleId], references: [id])
+
+  createdAt DateTime
+  updatedAt DateTime
+  roleId    String?
 
   @@map("user")
 }
 
 // prisma model user controller acess (RBAC)
-model UserRole {
+model Role {
   id          String       @id
   name        String       @unique
   permissions Permission[]
   user        User[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @default(now())
 
   @@map("role")
 }
 
 model Permission {
-  id    String     @id
-  name  String     @unique
-  roles UserRole[]
+  id    String @id
+  name  String @unique
+  roles Role[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 
   @@map("permission")
-}
-
-enum Role {
-  USER
-  ADMIN
 }

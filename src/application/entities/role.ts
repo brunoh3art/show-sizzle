@@ -13,6 +13,7 @@ export class Role {
 
   constructor(props: Replace<RoleProps, { permissions?: Permission[] }>, id?: string) {
     this._id = id ?? randomUUID();
+
     this.props = {
       ...props,
       permissions: props.permissions ?? [],
@@ -23,7 +24,7 @@ export class Role {
     return this._id;
   }
   public set name(name: string) {
-    this.props.name = name;
+    this.props.name = name.trim().toUpperCase();
   }
   public get name() {
     return this.props.name;

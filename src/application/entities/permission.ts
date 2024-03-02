@@ -11,11 +11,11 @@ export class Permission {
   private _id: string;
   private props: PermissionProps;
 
-  constructor(props: Replace<PermissionProps, { roles?: Role[] }>, id: string) {
+  constructor(props: Replace<PermissionProps, { roles?: Role[] }>, id?: string) {
     this._id = id ?? randomUUID();
     this.props = {
       ...props,
-      roles: this.props.roles || [],
+      roles: this.props?.roles || null,
     };
   }
 

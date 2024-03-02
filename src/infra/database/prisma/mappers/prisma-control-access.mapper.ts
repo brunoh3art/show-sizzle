@@ -1,7 +1,7 @@
 import { Permission } from '@application/entities/permission';
 import { Role } from '@application/entities/role';
 import { Replace } from '@helpers/replace';
-import { Permission as PrismaPermission, UserRole } from '@prisma/client';
+import { Permission as PrismaPermission, Role as PrismaRole } from '@prisma/client';
 
 export class PrismaControlAccessMapper {
   static toPrismaRole(role: Role) {
@@ -13,7 +13,7 @@ export class PrismaControlAccessMapper {
 
   static toDomainRole(
     role: Replace<
-      UserRole,
+      PrismaRole,
       {
         permissions: PrismaPermission[];
       }

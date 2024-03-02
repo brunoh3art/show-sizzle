@@ -14,6 +14,9 @@ import { DatabaseModule } from '../database/database.module';
 //controllers
 import { AppBrowse } from '@application/use-cases/app/app-browse';
 import { AppBrowseByGenre } from '@application/use-cases/app/app-browse-by-genre';
+import { AddPermissionRole, CreateRole } from '@application/use-cases/controlAccess/role';
+
+import { CreatePermission } from '@application/use-cases/controlAccess/permission';
 import { CreateEpisode } from '@application/use-cases/episode/create-episode';
 import { DeleteEpisode } from '@application/use-cases/episode/delete-episode';
 import { FindManyEpisode } from '@application/use-cases/episode/find-many-episode';
@@ -37,6 +40,7 @@ import { UpdateVideo } from '@application/use-cases/video/update-video';
 import { PassportModule } from '@nestjs/passport';
 import { AppController } from './controllers/app.controller';
 import { AuthController } from './controllers/auth.controller';
+import { ControlAccessController } from './controllers/control.access.controller';
 import { EpisodesController } from './controllers/episodes.controller';
 import { GenresController } from './controllers/genres.controller';
 import { MediaController } from './controllers/media-controller';
@@ -57,6 +61,7 @@ import { JwtStrategy } from './guards/jwt-strategy-guard';
     MediaController,
     AuthController,
     GenresController,
+    ControlAccessController,
   ],
   providers: [
     // use case Controller & Movie
@@ -99,6 +104,12 @@ import { JwtStrategy } from './guards/jwt-strategy-guard';
     //Genres
     FindManyGenre,
     CreateGenre,
+
+    //control access role
+    CreateRole,
+    AddPermissionRole,
+    //control access Permission
+    CreatePermission,
   ],
 })
 export class HttpModule {}
