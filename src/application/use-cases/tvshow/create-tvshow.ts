@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { Content, Title } from '../../entities/content';
 
 interface CreateTvShowRequest {
+  id?: string;
   title: string;
   original_title: string;
   overview?: string;
@@ -20,17 +21,20 @@ export class CreateTvShow {
   constructor(private contentRepository: TvShowRepository) {}
 
   async execute(request: CreateTvShowRequest): Promise<CreateTvShowResponse> {
-    const { title, original_title, overview, release_date, poster_image, background_image, published } = request;
+    const { id, title, original_title, overview, release_date, poster_image, background_image, published } = request;
 
-    const content = new Content({
-      title: new Title(title),
-      original_title: new Title(original_title),
-      overview,
-      release_date,
-      poster_image,
-      background_image,
-      published,
-    });
+    const content = new Content(
+      {
+        title: new Title(title),
+        original_title: new Title(original_title),
+        overview,
+        release_date,
+        poster_image,
+        background_image,
+        published,
+      },
+      id,
+    );
 
     await this.contentRepository.create(content);
 

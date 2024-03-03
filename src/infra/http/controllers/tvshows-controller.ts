@@ -50,9 +50,11 @@ export class TvShowsController {
 
   @Post()
   async create(@Body() body: ContentDTO) {
-    const { title, original_title, overview, poster_image, background_image, release_date, published, genres } = body;
+    const { id, title, original_title, overview, poster_image, background_image, release_date, published, genres } =
+      body;
 
     const { content } = await this.createTvShow.execute({
+      id,
       title,
       original_title,
       overview,

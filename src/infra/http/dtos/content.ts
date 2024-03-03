@@ -1,6 +1,8 @@
 import { IsBoolean, IsNotEmpty, Length } from 'class-validator';
 
 export class ContentDTO {
+  //alternative for id tmdb api
+  id?: string;
   @IsNotEmpty()
   @Length(3, 240)
   title: string;
