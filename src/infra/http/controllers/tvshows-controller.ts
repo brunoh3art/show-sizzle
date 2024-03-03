@@ -92,7 +92,7 @@ export class TvShowsController {
   async remove(@Param('id') id: string) {
     await this.deleteTvShow.execute({ tvShowId: id });
     return {
-      message: 'Movie deleted successfully',
+      message: 'Tv Show deleted successfully',
     };
   }
 }
