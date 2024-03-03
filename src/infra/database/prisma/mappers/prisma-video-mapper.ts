@@ -16,12 +16,14 @@ export class PrismaVideoMapper {
   }
 
   static toDomain(video: PrismaVideo) {
-    return new Video({
-      id: video.id,
-      title: video.title,
-      type: video.type,
-      format: video.format,
-      link: video.link,
-    });
+    return new Video(
+      {
+        title: video.title,
+        type: video.type,
+        format: video.format,
+        link: video.link,
+      },
+      video.id,
+    );
   }
 }

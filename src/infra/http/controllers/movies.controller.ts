@@ -46,15 +46,17 @@ export class MoviesController {
 
   @Get(':id')
   async movie(@Param('id') movieId: string) {
-    const [{ content }, { video }] = await Promise.all<any>([
-      this.getMovie.execute({ movieId }),
-      this.getVideo.execute({ videoId: movieId }).catch((err) => {
-        console.log({ err });
-        return {
-          video: null,
-        };
-      }),
-    ]);
+    console.log({ movieId });
+
+    const { content } = await this.getMovie.execute({ movieId });
+    console.log({ content });
+
+    const { video } = await this.getVideo.execute({ videoId: movieId }).catch((err) => {
+      console.log({ err });
+      return {
+        video: null,
+      };
+    });
 
     return { content: MovieViewModel.toHTTP(content), video: video && VideoViewModel.toHTTP(video) };
   }
