@@ -27,7 +27,11 @@ export class EpisodesController {
 
   @Get(':id')
   async episodes(@Param('id') id: string, @Query() { skip = 0, take = 50 }) {
-    const { total, episodes } = await this.findManyEpisode.execute({ seasonId: id, take, skip });
+    const { total, episodes } = await this.findManyEpisode.execute({
+      seasonId: id,
+      take: Number(take),
+      skip: Number(skip),
+    });
     return {
       total,
       episodes: episodes.map(EpisodeViewModel.toHTTP),
