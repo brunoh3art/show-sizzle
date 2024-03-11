@@ -1,12 +1,21 @@
-version: '3.4'
+version: '3'
 
 services:
-  showsizzle:
-    image: showsizzle
+  app:
     build:
-      context: .
-      dockerfile: ./Dockerfile
-    environment:
-      NODE_ENV: production
+      dockerfile: Dockerfile
+    container_name: app
+    restart: always
+    volumes:
+      - ./app:/usr/src/app
+      - /usr/src/app/node_modules
+    env_file:
+      - .env
+    tty: true
     ports:
-      - 3000:3000
+      - "3000:3000"
+    networks:
+      - node-network
+networks:
+  node-network:
+    driver: bridge
