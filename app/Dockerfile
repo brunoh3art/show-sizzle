@@ -1,4 +1,4 @@
-FROM node:20-alpine
+FROM node:20-alpine AS builder
 
 WORKDIR /app
 
@@ -12,5 +12,11 @@ COPY . .
 
 RUN pnpm build
 
-EXPOSE 3000
-CMD [ "pnpm", "start:prod" ]
+FROM alpine
+
+WORKDIR /app
+
+COPY --from=builder /app /app
+
+RUN apk update && apk upgrade && \
+  apk add nodejs npm
