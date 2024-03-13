@@ -1,4 +1,4 @@
-version: '3'
+version: '3.9'
 
 services:
   app:
@@ -7,26 +7,26 @@ services:
       dockerfile: Dockerfile
     container_name: app
     restart: always
-    command: node dist/src/main.js
+    command: node dist/src/main
     volumes:
-      - ./app:/usr/src/app
-      - /usr/src/app/node_modules
+      - /usr/src/app
+      - /usr/src/node_modules
     env_file:
       - ./app/.env
     tty: true
     networks:
-      - node-network
+      - show-sizzle
   nginx:
     build:
       context: ./nginx
       dockerfile: Dockerfile
     container_name: nginx
     networks:
-      - node-network
+      - show-sizzle
     ports:
       - "5500:80"
     depends_on:
       - app
 networks:
-  node-network:
+  show-sizzle:
     driver: bridge
