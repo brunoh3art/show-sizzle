@@ -1,6 +1,6 @@
 FROM node:20.11.1-alpine AS builder
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
 COPY . .
 
@@ -14,9 +14,9 @@ RUN pnpm build
 
 FROM alpine
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
-COPY --from=builder /usr/src/app /usr/src/app
+COPY --from=builder /app /app
 
 RUN apk update && apk upgrade && \
   apk add nodejs npm
